@@ -295,4 +295,4 @@ function TimelineEvent({ e }) {
   );
 }
 
-window.DebtorDetailScreen = DebtorDetailScreen;
+Object.assign(window, { DebtorDetailScreen, KV, Stat });

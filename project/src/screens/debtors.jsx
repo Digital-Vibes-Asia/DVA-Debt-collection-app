@@ -664,4 +664,4 @@ function Td({ children, align = 'left' }) {
   );
 }
 
-window.DebtorsScreen = DebtorsScreen;
+Object.assign(window, { DebtorsScreen, Th, Td });
