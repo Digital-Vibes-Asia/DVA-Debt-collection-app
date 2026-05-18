@@ -1,0 +1,14 @@
+{
+  "name": "dva-pulse",
+  "version": "1.0.0",
+  "description": "DVA Pulse — Southeast Asia debt collection CRM",
+  "type": "module",
+  "scripts": {
+    "dev": "vite project --port 5173 --host",
+    "build": "vite build project",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
