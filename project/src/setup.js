@@ -17,3 +17,10 @@ Object.assign(window, {
   useReducer, useContext, useId, createContext, memo,
   forwardRef, Fragment, Children, cloneElement,
 });
+
+window.PULSE_TWEAK_DEFAULTS = window.PULSE_TWEAK_DEFAULTS || {
+  accent: 'midnight',
+  density: 'cozy',
+  showMobileCompanion: false,
+  voxLive: true,
+};

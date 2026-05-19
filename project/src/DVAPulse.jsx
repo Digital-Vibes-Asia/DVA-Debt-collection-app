@@ -1,3 +1,6 @@
+'use client';
+
+// Boot order: setup (React globals) → data → ui primitives → screens → app
 import './setup.js';
 import './icons.jsx';
 import './data.jsx';
@@ -22,9 +25,7 @@ import './screens/mobile.jsx';
 import './tweaks.jsx';
 import './app.jsx';
 
-// app.jsx sets window.App; mount it here for the Vite dev path
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-ReactDOM.createRoot(document.getElementById('app-root')).render(
-  React.createElement(window.App)
-);
+export default function DVAPulse() {
+  const App = window.App;
+  return <App />;
+}

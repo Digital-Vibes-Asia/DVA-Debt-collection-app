@@ -1,18 +1,14 @@
 {
   "name": "dva-pulse",
   "version": "1.0.0",
-  "description": "DVA Pulse — Southeast Asia debt collection CRM",
-  "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^6.0.0"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^4.7.0",
+    "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }

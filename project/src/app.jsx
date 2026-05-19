@@ -100,4 +100,4 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('app-root')).render(<App />);
+window.App = App;
