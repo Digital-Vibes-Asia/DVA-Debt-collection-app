@@ -23,8 +23,8 @@ const ROLE_CONFIG = {
     welcomeRouting: 'Routing to your portfolio',
     user: { name: 'Farah Aziz', email: 'farah.aziz@nusantarabank.my', region: 'KL Central · Tier 2' },
   },
-  'head-of-sales': {
-    title: 'Head of Sales',
+  'senior-manager': {
+    title: 'Senior Manager',
     sub: 'All sales managers',
     icon: 'team',
     accent: '#B45309',
@@ -37,13 +37,13 @@ const ROLE_CONFIG = {
     headlineLead: 'Every manager.',
     headlineTail: 'One floor.',
     blurb: 'See aggregate book, utilisation, and casework across 5 sales managers and 26 agents.',
-    scopeLine: 'Floor-wide visibility. Drill-down requires named justification.',
+    scopeLine: 'Floor-wide visibility across all sales managers under you.',
     welcomeRouting: 'Routing to floor command',
     user: { name: 'Daniel Ong', email: 'd.ong@nusantarabank.my', region: 'MY · Multi-region · Tier 3' },
   },
-  'senior-manager': {
-    title: 'Senior Manager',
-    sub: 'Executive · network',
+  'head-of-sales': {
+    title: 'Head of Sales',
+    sub: 'Everyone · all dashboards',
     icon: 'star',
     accent: '#00B8D9',
     accentSoft: '#E6FAFD',
@@ -52,12 +52,12 @@ const ROLE_CONFIG = {
     factorLabel: 'Hardware security key',
     factorHint: 'YubiKey 5C · tap the contact within 30 seconds',
     factorIcon: 'cpu',
-    headlineLead: 'The whole portfolio.',
+    headlineLead: 'Every dashboard.',
     headlineTail: 'One key away.',
-    blurb: 'Cross-client, cross-region executive console. Vox audits every session.',
+    blurb: 'Cross-team, cross-region command console. See every senior manager, every sales manager, every account.',
     scopeLine: 'Network-wide read. Every action stored to legal hold.',
-    welcomeRouting: 'Authorizing executive session',
-    user: { name: 'Ravi Subramaniam', email: 'r.subramaniam@digitalvibesasia.com', region: 'Global · Executive · Tier 4' },
+    welcomeRouting: 'Authorizing Head of Sales session',
+    user: { name: 'Ravi Subramaniam', email: 'r.subramaniam@digitalvibesasia.com', region: 'Global · Tier 4' },
     dark: true,
   },
 };
@@ -131,12 +131,12 @@ function SalesManagerPreview() {
   );
 }
 
-function HeadOfSalesPreview() {
+function SeniorManagerPreview() {
   const pods = [
     { name: 'Farah Aziz',    region: 'KL Central',    agents: 6, book: '1.24', util: 0.78, color: '#E11D48' },
-    { name: 'Daniel Ong',    region: 'Penang',        agents: 5, book: '0.92', util: 0.64, color: '#B45309' },
     { name: 'Aisha Rahman',  region: 'Johor Bahru',   agents: 7, book: '1.45', util: 0.81, color: '#15803D' },
     { name: 'Vikram Suresh', region: 'Singapore',     agents: 4, book: '2.18', util: 0.72, color: '#006C82' },
+    { name: 'Lim Cheng Wei', region: 'Penang',        agents: 5, book: '0.92', util: 0.64, color: '#B45309' },
     { name: 'Mei Lin Tan',   region: 'Sabah/Sarawak', agents: 4, book: '0.68', util: 0.55, color: '#9F1239' },
   ];
   return (
@@ -146,7 +146,7 @@ function HeadOfSalesPreview() {
           <StatDot color="#B45309" pulse /> Floor command
         </div>
         <h2 style={{ margin: 0, fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em', maxWidth: 500, lineHeight: 1.15, fontFamily: 'var(--font-serif)' }}>
-          Daniel, <em style={{ color: '#B45309', fontStyle: 'italic' }}>5 managers</em> · 26 agents · 348 active accounts.
+          Daniel, <em style={{ color: '#B45309', fontStyle: 'italic' }}>5 sales managers</em> · 26 agents · 348 active accounts.
         </h2>
       </div>
 
@@ -221,18 +221,18 @@ function HeadOfSalesPreview() {
   );
 }
 
-function SeniorManagerPreview() {
+function HeadOfSalesPreview() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14, height: '100%', color: '#FBFAF7' }}>
       <div>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#00B8D9', fontSize: 11.5, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
-          <StatDot color="#00B8D9" pulse /> Network at a glance
+          <StatDot color="#00B8D9" pulse /> All dashboards · live
         </div>
         <h2 style={{ margin: 0, fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em', maxWidth: 460, lineHeight: 1.15, fontFamily: 'var(--font-serif)' }}>
           4 client orgs · 5 regions · <em style={{
             background: 'linear-gradient(120deg, #00B8D9, #FBFAF7, #E11D48)',
             WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', fontStyle: 'italic',
-          }}>RM 184.6M</em> under watch.
+          }}>RM 184.6M</em> under your watch.
         </h2>
       </div>
 
@@ -344,14 +344,14 @@ function SeniorManagerPreview() {
 
 const PREVIEWS = {
   'sales-manager': SalesManagerPreview,
-  'head-of-sales': HeadOfSalesPreview,
   'senior-manager': SeniorManagerPreview,
+  'head-of-sales': HeadOfSalesPreview,
 };
 
 // ─── Role selector (segmented control) ─────────────────────────
 
 function RoleSelector({ value, onChange }) {
-  const order = ['sales-manager', 'head-of-sales', 'senior-manager'];
+  const order = ['sales-manager', 'senior-manager', 'head-of-sales'];
   return (
     <div style={{
       display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
@@ -802,8 +802,8 @@ function LoginFlow() {
       {/* Footer */}
       <div style={{ position: 'relative' }}>
         <LoginFooter tone={dark ? 'dark' : 'light'}
-          status={role === 'senior-manager' ? 'All systems normal · Vox cohort #1 live' : 'All systems normal'}
-          region={role === 'senior-manager' ? 'Global' : (role === 'head-of-sales' ? 'MY · SG · ID' : 'MY · SG')} />
+          status={role === 'head-of-sales' ? 'All systems normal · Vox cohort #1 live' : 'All systems normal'}
+          region={role === 'head-of-sales' ? 'Global' : (role === 'senior-manager' ? 'MY · SG · ID' : 'MY · SG')} />
       </div>
 
       {step === 'welcome' && (
