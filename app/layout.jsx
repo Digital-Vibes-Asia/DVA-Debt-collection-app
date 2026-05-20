@@ -16,8 +16,8 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>
-        <div id="app-root">{children}</div>
+      <body style={{ height: '100%' }}>
+        <div id="app-root" style={{ height: '100%' }}>{children}</div>
       </body>
     </html>
   );
