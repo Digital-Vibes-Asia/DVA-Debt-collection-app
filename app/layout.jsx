@@ -16,6 +16,10 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
+      {/* Apply dark class immediately from localStorage to avoid flash */}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{if(localStorage.getItem('dva-dark')==='1')document.documentElement.classList.add('dark')}catch(e){}})()` }} />
+      </head>
       <body style={{ height: '100%' }}>
         <div id="app-root" style={{ height: '100%' }}>{children}</div>
       </body>

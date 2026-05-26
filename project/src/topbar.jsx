@@ -23,7 +23,7 @@ function Topbar({ title, kicker, breadcrumb, right }) {
       height: 60,
       padding: '0 24px',
       borderBottom: '1px solid var(--line)',
-      background: 'rgba(251,250,247,0.85)',
+      background: 'var(--topbar-bg)',
       backdropFilter: 'blur(8px)',
       position: 'sticky',
       top: 0,

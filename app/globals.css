@@ -43,7 +43,79 @@
   --shadow-sm: 0 1px 2px rgba(11,11,15,0.04), 0 1px 1px rgba(11,11,15,0.03);
   --shadow-md: 0 4px 14px rgba(11,11,15,0.06), 0 1px 2px rgba(11,11,15,0.04);
   --shadow-lg: 0 24px 48px -16px rgba(11,11,15,0.18), 0 8px 24px -8px rgba(11,11,15,0.08);
+
+  --topbar-bg:  rgba(251,250,247,0.88);
+  --white:      #FFFFFF;
 }
+
+/* ---------- Dark mode tokens ---------- */
+html.dark {
+  --topbar-bg:  rgba(24,24,27,0.88);
+  --white:      #27272A;
+  --ink:          #F4F4F5;
+  --ink-2:        #D4D4D8;
+  --ink-3:        #A1A1AA;
+  --muted:        #71717A;
+  --muted-2:      #52525B;
+  --line:         #3F3F46;
+  --line-2:       #27272A;
+  --surface:      #09090B;
+  --surface-2:    #18181B;
+  --card:         #27272A;
+
+  --brand-soft:   rgba(225,29,72,0.16);
+  --brand-ink:    #FDA4AF;
+
+  --success-soft: rgba(21,128,61,0.16);
+  --warn-soft:    rgba(180,83,9,0.18);
+  --danger-soft:  rgba(185,28,28,0.18);
+  --vox-soft:     rgba(0,184,217,0.13);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 24px 48px -16px rgba(0,0,0,0.6), 0 8px 24px -8px rgba(0,0,0,0.3);
+
+  color-scheme: dark;
+}
+
+/* Global dark-mode surface overrides for hardcoded whites */
+html.dark body { background: var(--surface); }
+html.dark .dark-card { background: var(--card) !important; }
+
+/* Core element dark overrides */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background: #27272A !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder { color: var(--muted) !important; }
+
+/* Table and card whites */
+html.dark table,
+html.dark thead,
+html.dark tbody,
+html.dark tr   { background: transparent; }
+html.dark th   { background: #18181B !important; color: var(--muted) !important; border-color: var(--line) !important; }
+html.dark td   { border-color: var(--line-2) !important; color: var(--ink-2) !important; }
+
+/* Scrollbar in dark */
+html.dark .thin-scroll::-webkit-scrollbar-thumb { background: #52525B; }
+
+/* Buttons that use hard white */
+html.dark button[style*="background: #fff"],
+html.dark button[style*="background:#fff"] { background: #27272A !important; color: var(--ink) !important; }
+
+/* Modal/dialog overlays */
+html.dark [style*="background: #FFFFFF"],
+html.dark [style*="background: rgb(255, 255, 255)"],
+html.dark [style*="background: white"] { background: var(--card) !important; }
+
+/* Force sidebar, cards, filter bars, tables to use dark surfaces */
+html.dark aside { background: var(--surface-2) !important; border-color: var(--line) !important; }
+html.dark main  { background: var(--surface) !important; }
 
 * { box-sizing: border-box; }
 html, body {

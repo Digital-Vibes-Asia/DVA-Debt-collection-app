@@ -68,10 +68,30 @@ const NAV_GROUPS = [
   },
 ];
 
+function useDarkMode() {
+  const [dark, setDark] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('dva-dark') === '1' || document.documentElement.classList.contains('dark');
+  });
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('dva-dark', '1');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('dva-dark', '0');
+    }
+  }, [dark]);
+
+  return [dark, setDark];
+}
+
 function Sidebar({ current, onNav }) {
   const [orgOpen, setOrgOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [org, setOrg] = useState({ id: 'maybank', code: 'MB', name: 'Maybank', sub: 'Cards & loans · MY' });
+  const [dark, setDark] = useDarkMode();
 
   return (
     <aside style={{
@@ -85,9 +105,35 @@ function Sidebar({ current, onNav }) {
       position: 'sticky',
       top: 0,
     }}>
-      {/* Logo */}
-      <div style={{ padding: '18px 18px 14px', borderBottom: '1px solid var(--line-2)' }}>
+      {/* Logo + dark toggle */}
+      <div style={{ padding: '14px 18px 12px', borderBottom: '1px solid var(--line-2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <PulseLogo />
+        <button
+          onClick={() => setDark(d => !d)}
+          title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+          style={{
+            width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+            background: dark ? '#27272A' : '#F1F1EE',
+            border: '1px solid var(--line)',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', color: dark ? '#E4E4EB' : '#3F3F46',
+            transition: 'all 200ms ease',
+            boxShadow: dark ? 'inset 0 0 0 1px rgba(255,255,255,0.06)' : 'none',
+          }}
+        >
+          {dark ? (
+            /* Sun icon */
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+          ) : (
+            /* Moon icon */
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          )}
+        </button>
       </div>
 
       {/* Org switcher */}
