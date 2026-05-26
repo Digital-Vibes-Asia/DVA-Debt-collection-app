@@ -256,6 +256,335 @@ function MultiFilterDropdown({ icon, label, values, options, onChange }) {
   );
 }
 
+// ─── WhatsApp Blast Modal ──────────────────────────────────────────
+function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
+  const [template, setTemplate] = useState('reminder');
+  const [language, setLanguage] = useState('en');
+  const [sent, setSent]         = useState(false);
+
+  const totalAmt = debtors.reduce((s, d) => s + d.balance, 0);
+
+  const TEMPLATES = [
+    {
+      value: 'reminder',
+      label: 'Payment reminder',
+      icon: 'bell',
+      desc: 'Friendly first-touch reminder',
+    },
+    {
+      value: 'final',
+      label: 'Final notice',
+      icon: 'alert',
+      desc: 'Urgency escalation — last warning',
+    },
+    {
+      value: 'ptp',
+      label: 'PTP follow-up',
+      icon: 'check',
+      desc: 'Confirm promised payment date',
+    },
+    {
+      value: 'hardship',
+      label: 'Hardship plan',
+      icon: 'shield',
+      desc: 'Offer restructuring options',
+    },
+  ];
+
+  const LANGUAGES = [
+    { value: 'en', label: 'English',          flag: '🇬🇧' },
+    { value: 'ms', label: 'Bahasa Malaysia',  flag: '🇲🇾' },
+    { value: 'zh', label: 'Mandarin',         flag: '🇨🇳' },
+    { value: 'ta', label: 'Tamil',            flag: '🇮🇳' },
+  ];
+
+  // Message previews per template + language
+  const PREVIEW = {
+    reminder: {
+      en: (d) => `Dear ${d.name.split(' ')[0]},\n\nThis is a friendly reminder that your ${d.product} account (${d.id}) has an outstanding balance of *RM ${d.balance.toLocaleString()}*.\n\nPlease make a payment at your earliest convenience to avoid further charges.\n\nThank you,\nDVA Collections`,
+      ms: (d) => `Salam ${d.name.split(' ')[0]},\n\nIni adalah peringatan mesra bahawa akaun ${d.product} anda (${d.id}) mempunyai baki tertunggak sebanyak *RM ${d.balance.toLocaleString()}*.\n\nSila buat pembayaran secepat mungkin untuk mengelakkan caj lanjut.\n\nTerima kasih,\nDVA Collections`,
+      zh: (d) => `亲爱的 ${d.name.split(' ')[0]}，\n\n此为友好提醒，您的${d.product}账户（${d.id}）尚有未结清余额 *RM ${d.balance.toLocaleString()}*。\n\n请尽快还款以避免额外费用。\n\n谢谢，\nDVA Collections`,
+      ta: (d) => `அன்பான ${d.name.split(' ')[0]},\n\nஉங்கள் ${d.product} கணக்கு (${d.id}) இல் *RM ${d.balance.toLocaleString()}* நிலுவை உள்ளது என்று நட்பான நினைவூட்டல்.\n\nதயவுசெய்து விரைவில் கட்டணம் செலுத்தவும்.\n\nநன்றி,\nDVA Collections`,
+    },
+    final: {
+      en: (d) => `⚠️ FINAL NOTICE\n\nDear ${d.name.split(' ')[0]},\n\nYour ${d.product} account (${d.id}) remains unpaid with a balance of *RM ${d.balance.toLocaleString()}* — now ${d.daysOverdue} days overdue.\n\nImmediate action is required. Failure to respond within 48 hours may result in legal proceedings.\n\nDVA Collections`,
+      ms: (d) => `⚠️ NOTIS AKHIR\n\nSalam ${d.name.split(' ')[0]},\n\nAkaun ${d.product} anda (${d.id}) masih belum dibayar dengan baki *RM ${d.balance.toLocaleString()}* — kini ${d.daysOverdue} hari tertunggak.\n\nTindakan segera diperlukan. Kegagalan bertindak balas dalam 48 jam boleh mengakibatkan tindakan undang-undang.\n\nDVA Collections`,
+      zh: (d) => `⚠️ 最终通知\n\n亲爱的 ${d.name.split(' ')[0]}，\n\n您的${d.product}账户（${d.id}）余额 *RM ${d.balance.toLocaleString()}* 至今未还清，已逾期 ${d.daysOverdue} 天。\n\n须立即处理。若48小时内未回应，可能将采取法律行动。\n\nDVA Collections`,
+      ta: (d) => `⚠️ இறுதி அறிவிப்பு\n\n${d.name.split(' ')[0]},\n\nஉங்கள் ${d.product} கணக்கு (${d.id}) இல் *RM ${d.balance.toLocaleString()}* நிலுவை உள்ளது — ${d.daysOverdue} நாட்கள் தாமதமாகிவிட்டது.\n\n48 மணி நேரத்திற்குள் பதில் அளிக்காவிட்டால் சட்ட நடவடிக்கை எடுக்கப்படும்.\n\nDVA Collections`,
+    },
+    ptp: {
+      en: (d) => `Dear ${d.name.split(' ')[0]},\n\nWe noted your commitment to pay *RM ${d.balance.toLocaleString()}* for your ${d.product} account (${d.id}).\n\nCould you please confirm your intended payment date? Reply with the date and we'll update your account accordingly.\n\nDVA Collections`,
+      ms: (d) => `Salam ${d.name.split(' ')[0]},\n\nKami mengambil perhatian komitmen anda untuk membayar *RM ${d.balance.toLocaleString()}* bagi akaun ${d.product} anda (${d.id}).\n\nBoleh anda sahkan tarikh pembayaran yang dirancang? Balas dengan tarikh tersebut.\n\nDVA Collections`,
+      zh: (d) => `亲爱的 ${d.name.split(' ')[0]}，\n\n我们注意到您承诺还清${d.product}账户（${d.id}）的 *RM ${d.balance.toLocaleString()}*。\n\n请确认您预计的还款日期，回复日期后我们将更新您的账户。\n\nDVA Collections`,
+      ta: (d) => `அன்பான ${d.name.split(' ')[0]},\n\nஉங்கள் ${d.product} கணக்கு (${d.id}) இல் *RM ${d.balance.toLocaleString()}* செலுத்துவதற்கான உங்கள் உறுதிமொழியை நாங்கள் கவனித்தோம்.\n\nதயவுசெய்து உங்கள் திட்டமிட்ட கட்டண தேதியை உறுதிப்படுத்தவும்.\n\nDVA Collections`,
+    },
+    hardship: {
+      en: (d) => `Dear ${d.name.split(' ')[0]},\n\nWe understand that circumstances can be challenging. Regarding your ${d.product} account (${d.id}) with a balance of *RM ${d.balance.toLocaleString()}*, we'd like to offer you a structured repayment plan.\n\nReply YES to speak with a financial advisor.\n\nDVA Collections`,
+      ms: (d) => `Salam ${d.name.split(' ')[0]},\n\nKami faham keadaan boleh mencabar. Berkaitan akaun ${d.product} anda (${d.id}) dengan baki *RM ${d.balance.toLocaleString()}*, kami ingin menawarkan pelan bayaran balik berstruktur.\n\nBalas YA untuk bercakap dengan penasihat kewangan.\n\nDVA Collections`,
+      zh: (d) => `亲爱的 ${d.name.split(' ')[0]}，\n\n我们理解情况有时会很困难。关于您的${d.product}账户（${d.id}），余额 *RM ${d.balance.toLocaleString()}*，我们希望为您提供分期还款计划。\n\n回复"是"以联系财务顾问。\n\nDVA Collections`,
+      ta: (d) => `அன்பான ${d.name.split(' ')[0]},\n\nசூழ்நிலைகள் சவாலாக இருக்கலாம் என்பதை நாங்கள் புரிந்துகொள்கிறோம். உங்கள் ${d.product} கணக்கு (${d.id}) இல் *RM ${d.balance.toLocaleString()}* உள்ளது — ஒரு திட்டமிட்ட திருப்பிச் செலுத்தும் திட்டம் வழங்க விரும்புகிறோம்.\n\nஆம் என்று பதிலளிக்கவும்.\n\nDVA Collections`,
+    },
+  };
+
+  // Preview debtor: use first selected debtor as sample
+  const previewDebtor = debtors[0] || { name: 'Ahmad', product: 'Credit Card', id: 'MB-0001', balance: 12500, daysOverdue: 45 };
+  const previewText = PREVIEW[template]?.[language]?.(previewDebtor) || '';
+
+  const clientOrg = (window.CLIENT_ORGS || []).find(o => o.id === previewDebtor.clientId);
+
+  function handleSend() {
+    setSent(true);
+    setTimeout(() => { onConfirm(); onClose(); }, 1400);
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(11,11,15,0.48)',
+        backdropFilter: 'blur(6px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 200,
+        animation: 'fadeIn 180ms ease',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          width: 540,
+          maxHeight: '90vh',
+          background: '#fff',
+          borderRadius: 18,
+          boxShadow: '0 40px 80px -20px rgba(11,11,15,0.5)',
+          overflow: 'hidden',
+          display: 'flex', flexDirection: 'column',
+          animation: 'slideUp 260ms cubic-bezier(.2,.8,.2,1)',
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '18px 20px 16px',
+          background: 'linear-gradient(135deg, rgba(37,211,102,0.09), rgba(37,211,102,0.01))',
+          borderBottom: '1px solid var(--line)',
+          display: 'flex', alignItems: 'flex-start', gap: 12,
+          flexShrink: 0,
+        }}>
+          <div style={{
+            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+            background: 'linear-gradient(135deg, #128C7E, #25D366)',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 12px -4px rgba(37,211,102,0.5)',
+          }}>
+            <Icon name="whatsapp" size={20} color="#fff" />
+          </div>
+          <div style={{ flex: 1, lineHeight: 1.25 }}>
+            <div style={{ fontSize: 15, fontWeight: 700 }}>Send WhatsApp Blast</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span><span className="tnum" style={{ fontWeight: 600, color: '#128C7E' }}>{debtors.length}</span> recipient{debtors.length !== 1 ? 's' : ''}</span>
+              <span style={{ color: 'var(--line)' }}>·</span>
+              <span>Total owing: <span className="tnum" style={{ fontWeight: 600, color: 'var(--ink-2)' }}>RM {totalAmt.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span></span>
+            </div>
+          </div>
+          <button onClick={onClose} style={{
+            width: 28, height: 28, borderRadius: 7,
+            background: 'transparent', border: '1px solid var(--line)',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', color: 'var(--muted)',
+          }}>
+            <Icon name="close" size={13} />
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+          {/* Recipients list */}
+          <div>
+            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Recipients</div>
+            <div style={{
+              border: '1px solid var(--line)', borderRadius: 10, overflow: 'hidden',
+              maxHeight: 160, overflowY: 'auto',
+            }}>
+              {debtors.map((d, i) => (
+                <div key={d.id} style={{
+                  display: 'grid', gridTemplateColumns: '28px 1fr auto auto',
+                  alignItems: 'center', gap: 10,
+                  padding: '9px 12px',
+                  borderTop: i ? '1px solid var(--line-2)' : 'none',
+                  background: i % 2 === 0 ? '#fff' : '#FAFAF9',
+                }}>
+                  <Avatar name={d.name} size={26} />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 12.5, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{d.name}</div>
+                    <div style={{ fontSize: 10.5, color: 'var(--muted)' }}>{d.product}</div>
+                  </div>
+                  <span className="mono" style={{ fontSize: 10.5, color: 'var(--muted)', whiteSpace: 'nowrap' }}>{d.id}</span>
+                  <span className="tnum" style={{ fontSize: 12.5, fontWeight: 700, color: d.daysOverdue > 90 ? '#9F1239' : d.daysOverdue > 30 ? '#B45309' : 'var(--ink)', whiteSpace: 'nowrap' }}>
+                    RM {d.balance.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Template */}
+          <div>
+            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Message template</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 7 }}>
+              {TEMPLATES.map(t => {
+                const active = template === t.value;
+                return (
+                  <button
+                    key={t.value}
+                    onClick={() => setTemplate(t.value)}
+                    style={{
+                      padding: '10px 12px',
+                      background: active ? 'rgba(18,140,126,0.06)' : '#FAFAF9',
+                      border: '1.5px solid ' + (active ? '#128C7E' : 'var(--line)'),
+                      borderRadius: 9, cursor: 'pointer', textAlign: 'left',
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      transition: 'all 140ms ease',
+                    }}
+                  >
+                    <div style={{
+                      width: 30, height: 30, borderRadius: 8, flexShrink: 0,
+                      background: active ? '#128C7E' : '#F1F1EE',
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Icon name={t.icon} size={14} color={active ? '#fff' : 'var(--muted)'} />
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 600, color: active ? '#0B5F58' : 'var(--ink-2)' }}>{t.label}</div>
+                      <div style={{ fontSize: 10.5, color: 'var(--muted)', marginTop: 1 }}>{t.desc}</div>
+                    </div>
+                    {active && (
+                      <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
+                        <Icon name="check" size={13} color="#128C7E" strokeWidth={2.5} />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Language */}
+          <div>
+            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Language</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 7 }}>
+              {LANGUAGES.map(lg => {
+                const active = language === lg.value;
+                return (
+                  <button
+                    key={lg.value}
+                    onClick={() => setLanguage(lg.value)}
+                    style={{
+                      padding: '8px 6px',
+                      background: active ? '#128C7E' : '#FAFAF9',
+                      border: '1.5px solid ' + (active ? '#128C7E' : 'var(--line)'),
+                      borderRadius: 9, cursor: 'pointer', textAlign: 'center',
+                      transition: 'all 140ms ease',
+                      boxShadow: active ? '0 4px 10px -3px rgba(18,140,126,0.4)' : 'none',
+                    }}
+                  >
+                    <div style={{ fontSize: 16, marginBottom: 3 }}>{lg.flag}</div>
+                    <div style={{ fontSize: 10.5, fontWeight: 600, color: active ? '#fff' : 'var(--ink-2)' }}>{lg.label}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Message preview */}
+          <div>
+            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>
+              Message preview &nbsp;<span style={{ fontSize: 10.5, fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--muted)' }}>showing {previewDebtor.name.split(' ')[0]}'s message</span>
+            </div>
+            <div style={{
+              background: '#ECF5E9',
+              borderRadius: 12,
+              padding: '12px 14px',
+              position: 'relative',
+            }}>
+              {/* WA header bar */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                marginBottom: 10, paddingBottom: 10,
+                borderBottom: '1px solid rgba(0,0,0,0.06)',
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 999,
+                  background: 'linear-gradient(135deg, #128C7E, #25D366)',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon name="whatsapp" size={14} color="#fff" />
+                </div>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700 }}>DVA Collections</div>
+                  {clientOrg && <div style={{ fontSize: 10, color: 'var(--muted)' }}>via {clientOrg.name}</div>}
+                </div>
+              </div>
+              {/* Bubble */}
+              <div style={{
+                background: '#fff',
+                borderRadius: '4px 12px 12px 12px',
+                padding: '10px 12px',
+                fontSize: 12.5, lineHeight: 1.6,
+                color: 'var(--ink)',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+              }}>
+                {previewText}
+              </div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', textAlign: 'right', marginTop: 4 }}>
+                {new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' })} ✓✓
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer actions — always visible */}
+        <div style={{
+          padding: '14px 20px',
+          borderTop: '1px solid var(--line)',
+          display: 'flex', gap: 8, flexShrink: 0,
+          background: '#fff',
+        }}>
+          <button onClick={onClose} style={{
+            height: 42, padding: '0 16px',
+            background: '#fff', color: 'var(--ink-2)',
+            border: '1px solid var(--line)', borderRadius: 10,
+            fontSize: 13.5, fontWeight: 500, cursor: 'pointer',
+          }}>Cancel</button>
+          <button
+            onClick={handleSend}
+            disabled={sent}
+            style={{
+              flex: 1, height: 42, padding: '0 16px',
+              background: sent ? '#ECFDF3' : 'linear-gradient(135deg, #128C7E, #25D366)',
+              color: sent ? '#15803D' : '#fff',
+              border: sent ? '1px solid #BBF7D0' : 'none',
+              borderRadius: 10,
+              fontSize: 13.5, fontWeight: 600, cursor: sent ? 'default' : 'pointer',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              boxShadow: sent ? 'none' : '0 8px 20px -8px rgba(18,140,126,0.6)',
+              transition: 'all 240ms ease',
+            }}
+          >
+            {sent ? (
+              <><Icon name="check" size={15} color="#15803D" strokeWidth={2.5} /> Messages sent!</>
+            ) : (
+              <><Icon name="whatsapp" size={15} /> Send to {debtors.length} debtor{debtors.length !== 1 ? 's' : ''}</>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Vox Queue Modal ───────────────────────────────────────────────
 function VoxQueueModal({ count, onClose, onConfirm }) {
   const [timeSlot, setTimeSlot]     = useState('today-2pm');
@@ -655,6 +984,7 @@ function DebtorsScreen({ onOpenDebtor }) {
   const [selected, setSelected] = useState(new Set());
   const [bucket, setBucket]     = useState('all');
   const [voxModal, setVoxModal] = useState(false);
+  const [waModal, setWaModal]   = useState(false);
   const [query, setQuery]       = useState('');
   const [assigned, setAssigned] = useState('all');
   const [clients, setClients]   = useState([]); // multi-select
@@ -874,7 +1204,7 @@ function DebtorsScreen({ onOpenDebtor }) {
             <span className="tnum" style={{ fontWeight: 600 }}>{selected.size}</span> selected
           </span>
           <div style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.15)' }} />
-          <Button kind="whatsapp" size="sm" icon="whatsapp">Send WhatsApp blast</Button>
+          <Button kind="whatsapp" size="sm" icon="whatsapp" onClick={() => setWaModal(true)}>Send WhatsApp blast</Button>
           <Button kind="vox" size="sm" icon="bot" onClick={() => setVoxModal(true)}>Queue Vox call</Button>
           <Button kind="secondary" size="sm" icon="workflows" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.18)' }}>Apply workflow</Button>
           <Button kind="secondary" size="sm" icon="user" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.18)' }}>Reassign</Button>
@@ -882,6 +1212,15 @@ function DebtorsScreen({ onOpenDebtor }) {
           <IconButton icon="close" tone="neutral" onClick={() => setSelected(new Set())} style={{ color: '#fff' }} />
         </div>
       ) : null}
+
+      {/* WhatsApp Blast Modal */}
+      {waModal && (
+        <WhatsAppBlastModal
+          debtors={filtered.filter(d => selected.has(d.id))}
+          onClose={() => setWaModal(false)}
+          onConfirm={() => { setSelected(new Set()); setWaModal(false); }}
+        />
+      )}
 
       {/* Vox Queue Modal */}
       {voxModal && (
