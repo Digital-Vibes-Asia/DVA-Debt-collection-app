@@ -321,7 +321,7 @@ function Sidebar({ current, onNav }) {
                 </button>
               ))}
               <div style={{ height: 1, background: 'var(--line-2)', margin: '4px 0' }} />
-              <button onClick={() => { setUserOpen(false); window.toast({ title: 'Signed out', tone: 'default', icon: 'lock' }); }} style={{
+              <button onClick={() => { setUserOpen(false); window.location.href = '/login/sales-manager'; }} style={{
                 width: '100%', textAlign: 'left',
                 padding: '8px 10px',
                 background: 'transparent', border: 'none',
