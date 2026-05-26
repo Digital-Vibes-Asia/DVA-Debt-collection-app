@@ -2,13 +2,13 @@
 
 function PlansScreen({ onOpenDebtor }) {
   const plans = [
-    { id: 'P-9821', debtor: 'Aishah binti Rahman', ccy: 'MYR', total: 12450, instalments: 2, next: '22 May', state: 'active',  progress: 0,  agent: 'You' },
-    { id: 'P-9818', debtor: 'Somchai Charoenpong', ccy: 'THB', total: 28400, instalments: 3, next: '15 May', state: 'on-track', progress: 33, agent: 'You' },
-    { id: 'P-9810', debtor: 'Budi Santoso',         ccy: 'IDR', total: 8450000, instalments: 2, next: '20 May', state: 'on-track', progress: 50, agent: 'Hassan T.' },
-    { id: 'P-9802', debtor: 'Nguyễn Văn Minh',     ccy: 'VND', total: 18500000, instalments: 4, next: 'Today', state: 'due-today', progress: 25, agent: 'You' },
-    { id: 'P-9786', debtor: 'Tan Wei Ming',         ccy: 'SGD', total: 1250,   instalments: 3, next: '26 May', state: 'on-track', progress: 33, agent: 'Vox AI' },
-    { id: 'P-9762', debtor: 'Lim Hui Min',          ccy: 'MYR', total: 6780,   instalments: 3, next: '26 May', state: 'new',      progress: 0,  agent: 'Vox AI' },
-    { id: 'P-9701', debtor: 'José Antonio Cruz',    ccy: 'PHP', total: 88300,  instalments: 6, next: '12 May', state: 'broken',   progress: 16, agent: 'Hassan T.' },
+    { id: 'P-9821', debtor: 'Aishah binti Rahman',       ccy: 'MYR', total: 12450,  instalments: 2, next: '22 May', state: 'active',   progress: 0,  agent: 'You' },
+    { id: 'P-9818', debtor: 'Chong Wei Lim',             ccy: 'MYR', total: 28400,  instalments: 3, next: '15 May', state: 'on-track', progress: 33, agent: 'You' },
+    { id: 'P-9810', debtor: 'Mohd Ridzuan bin Zainal',   ccy: 'MYR', total: 8450,   instalments: 2, next: '20 May', state: 'on-track', progress: 50, agent: 'Hassan T.' },
+    { id: 'P-9802', debtor: 'Ahmad Firdaus bin Ismail',  ccy: 'MYR', total: 15800,  instalments: 4, next: 'Today',  state: 'due-today',progress: 25, agent: 'You' },
+    { id: 'P-9786', debtor: 'Tan Wei Ming',              ccy: 'MYR', total: 1250,   instalments: 3, next: '26 May', state: 'on-track', progress: 33, agent: 'Vox AI' },
+    { id: 'P-9762', debtor: 'Lim Hui Min',               ccy: 'MYR', total: 6780,   instalments: 3, next: '26 May', state: 'new',      progress: 0,  agent: 'Vox AI' },
+    { id: 'P-9701', debtor: 'Wong Chee Kiong',           ccy: 'MYR', total: 88300,  instalments: 6, next: '12 May', state: 'broken',   progress: 16, agent: 'Hassan T.' },
   ];
 
   return (

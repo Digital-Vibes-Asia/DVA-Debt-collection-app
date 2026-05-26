@@ -1,13 +1,13 @@
 // Call console — Vox AI live call UI with transcript, sentiment, supervisor controls
 
 const PULSE_QUEUE = [
-  { id: 'q1', name: 'Lim Hui Min',          status: 'live',     dur: '0:30', vox: true,  country: 'MY', sentiment: 'cooperative', debtorId: 'D-2810' },
-  { id: 'q2', name: 'Trần Thị Hương',       status: 'queued',   scheduled: 'in 4 min',  vox: true,  country: 'VN' },
-  { id: 'q3', name: 'Tan Wei Ming',         status: 'queued',   scheduled: 'in 7 min',  vox: true,  country: 'SG' },
-  { id: 'q4', name: 'Aishah binti Rahman',  status: 'callback', scheduled: '15:30',                country: 'MY' },
-  { id: 'q5', name: 'Somchai Charoenpong',  status: 'queued',   scheduled: 'in 22 min', vox: true,  country: 'TH' },
-  { id: 'q6', name: 'Budi Santoso',         status: 'queued',   scheduled: 'in 31 min', vox: true,  country: 'ID' },
-  { id: 'q7', name: 'Maria Cristina Reyes', status: 'callback', scheduled: '16:00',                country: 'PH', priority: true },
+  { id: 'q1', name: 'Lim Hui Min',               status: 'live',     dur: '0:30', vox: true,  country: 'MY', sentiment: 'cooperative', debtorId: 'D-2810' },
+  { id: 'q2', name: 'Datin Rohaiza binti Azman', status: 'queued',   scheduled: 'in 4 min',  vox: true,  country: 'MY' },
+  { id: 'q3', name: 'Tan Wei Ming',              status: 'queued',   scheduled: 'in 7 min',  vox: true,  country: 'MY' },
+  { id: 'q4', name: 'Aishah binti Rahman',       status: 'callback', scheduled: '15:30',                country: 'MY' },
+  { id: 'q5', name: 'Chong Wei Lim',             status: 'queued',   scheduled: 'in 22 min', vox: true,  country: 'MY' },
+  { id: 'q6', name: 'Mohd Ridzuan bin Zainal',   status: 'queued',   scheduled: 'in 31 min', vox: true,  country: 'MY' },
+  { id: 'q7', name: 'Siti Norzahira binti Hamid',status: 'callback', scheduled: '16:00',                country: 'MY', priority: true },
 ];
 
 const LIM_HUI_MIN_TRANSCRIPT = [

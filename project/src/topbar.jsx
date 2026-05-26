@@ -315,7 +315,7 @@ function NotificationsPanel({ open, onClose }) {
     { icon: 'bot',      tone: 'vox',   title: 'Vox needs escalation help',       desc: 'Customer requested human agent on call 9442',   time: '18m ago', unread: true },
     { icon: 'shield',   tone: 'danger', title: 'Legal handover requested',       desc: 'Saidi Co. Solicitors · case LG-1841',           time: '32m ago', unread: true },
     { icon: 'plans',    tone: 'brand', title: 'Payment plan PL-0998 broken',     desc: 'Tan Wei Ming missed 2nd instalment',            time: '1h ago' },
-    { icon: 'receipt',  tone: 'default', title: 'Payment received · RM 1,200',   desc: 'Budi Santoso · via FPX',                       time: '2h ago' },
+    { icon: 'receipt',  tone: 'default', title: 'Payment received · RM 1,200',   desc: 'Mohd Ridzuan bin Zainal · via FPX',            time: '2h ago' },
   ];
   const toneBg = { wa: 'rgba(37,211,102,0.12)', success: 'var(--success-soft)', warn: 'var(--warn-soft)', vox: 'var(--vox-soft)', danger: 'var(--danger-soft)', brand: 'var(--brand-soft)', default: 'var(--surface-2)' };
   const toneFg = { wa: 'var(--wa-deep)', success: 'var(--success)', warn: 'var(--warn)', vox: 'var(--vox-deep)', danger: 'var(--danger)', brand: 'var(--brand-deep)', default: 'var(--ink-3)' };

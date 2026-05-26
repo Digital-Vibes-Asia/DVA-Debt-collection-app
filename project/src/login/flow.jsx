@@ -102,10 +102,10 @@ function SalesManagerPreview() {
           <div style={{ fontSize: 11, color: '#A1A1AA' }} className="mono">sorted by due ↓</div>
         </div>
         {[
-          { name: 'Lim Wei Jun', id: 'NB-2841', amt: 'RM 8,420',  bucket: '60–89d', tone: '#B45309', bg: '#FEF3C7', due: 'Today' },
-          { name: 'Siti Nurhaliza', id: 'NB-2902', amt: 'RM 3,140',  bucket: '30–59d', tone: '#15803D', bg: '#ECFDF3', due: 'Today' },
-          { name: 'Pradeep Kumar', id: 'NB-2715', amt: 'RM 14,280', bucket: '90+',    tone: '#B91C1C', bg: '#FEE2E2', due: 'Overdue' },
-          { name: 'Chen Mei Hua', id: 'NB-3104', amt: 'RM 5,820',  bucket: '30–59d', tone: '#15803D', bg: '#ECFDF3', due: 'Tomorrow' },
+          { name: 'Aishah binti Rahman',    id: 'NB-2841', amt: 'RM 12,450', bucket: '60–89d', tone: '#B45309', bg: '#FEF3C7', due: 'Today' },
+          { name: 'Lim Hui Min',            id: 'NB-2810', amt: 'RM 6,780',  bucket: '30–59d', tone: '#15803D', bg: '#ECFDF3', due: 'Today' },
+          { name: 'Siti Norzahira binti Hamid', id: 'NB-2654', amt: 'RM 45,200', bucket: '90+', tone: '#B91C1C', bg: '#FEE2E2', due: 'Overdue' },
+          { name: 'Ahmad Firdaus bin Ismail', id: 'NB-2839', amt: 'RM 15,800', bucket: '30–59d', tone: '#15803D', bg: '#ECFDF3', due: 'Tomorrow' },
         ].map((r, i) => (
           <div key={i} style={{
             display: 'flex', alignItems: 'center', gap: 12,
@@ -134,11 +134,11 @@ function SalesManagerPreview() {
 
 function SeniorManagerPreview() {
   const pods = [
-    { name: 'Farah Aziz',    region: 'KL Central',    agents: 6, book: '1.24', util: 0.78, color: '#E11D48' },
-    { name: 'Aisha Rahman',  region: 'Johor Bahru',   agents: 7, book: '1.45', util: 0.81, color: '#15803D' },
-    { name: 'Vikram Suresh', region: 'Singapore',     agents: 4, book: '2.18', util: 0.72, color: '#006C82' },
-    { name: 'Lim Cheng Wei', region: 'Penang',        agents: 5, book: '0.92', util: 0.64, color: '#B45309' },
-    { name: 'Mei Lin Tan',   region: 'Sabah/Sarawak', agents: 4, book: '0.68', util: 0.55, color: '#9F1239' },
+    { name: 'Farah Aziz',         region: 'KL Central',    agents: 6, book: '1.24', util: 0.78, color: '#E11D48' },
+    { name: 'Noraini binti Said', region: 'Johor Bahru',   agents: 7, book: '1.45', util: 0.81, color: '#15803D' },
+    { name: 'Rajendran Pillai',   region: 'Penang',        agents: 4, book: '2.18', util: 0.72, color: '#006C82' },
+    { name: 'Lim Cheng Wei',      region: 'Seremban',      agents: 5, book: '0.92', util: 0.64, color: '#B45309' },
+    { name: 'Salmah binti Yusof', region: 'Sabah/Sarawak', agents: 4, book: '0.68', util: 0.55, color: '#9F1239' },
   ];
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14, height: '100%' }}>
