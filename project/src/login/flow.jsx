@@ -230,7 +230,7 @@ function HeadOfSalesPreview() {
           <StatDot color="#00B8D9" pulse /> All dashboards · live
         </div>
         <h2 style={{ margin: 0, fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em', maxWidth: 460, lineHeight: 1.15, fontFamily: 'var(--font-serif)' }}>
-          4 client orgs · 5 regions · <em style={{
+          6 client orgs · Malaysia · <em style={{
             background: 'linear-gradient(120deg, #00B8D9, #FBFAF7, #E11D48)',
             WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', fontStyle: 'italic',
           }}>RM 184.6M</em> under your watch.
@@ -260,13 +260,14 @@ function HeadOfSalesPreview() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {[
-            { name: 'Malaysia',            val: 64.2, pct: 0.35, color: '#E11D48' },
-            { name: 'Singapore',           val: 51.8, pct: 0.28, color: '#00B8D9' },
-            { name: 'Indonesia',           val: 41.4, pct: 0.22, color: '#B45309' },
-            { name: 'Philippines',         val: 18.0, pct: 0.10, color: '#15803D' },
-            { name: 'Thailand · Vietnam',  val:  9.2, pct: 0.05, color: '#9F1239' },
+            { name: 'Maybank',   val: 52.1, pct: 0.35, color: '#FCD34D' },
+            { name: 'CIMB',      val: 44.8, pct: 0.30, color: '#E11D48' },
+            { name: 'RHB',       val: 38.2, pct: 0.26, color: '#A78BFA' },
+            { name: 'Coway',     val: 24.6, pct: 0.17, color: '#00B8D9' },
+            { name: 'Maxis',     val: 15.4, pct: 0.10, color: '#F59E0B' },
+            { name: 'U Mobile',  val:  9.5, pct: 0.06, color: '#C084FC' },
           ].map((r, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '130px 1fr 84px', alignItems: 'center', gap: 14 }}>
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '90px 1fr 84px', alignItems: 'center', gap: 14 }}>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>{r.name}</div>
               <div style={{ height: 7, borderRadius: 999, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
                 <div style={{ height: '100%', width: (r.pct * 100 / 0.35) + '%', background: r.color, borderRadius: 999 }} />
@@ -286,12 +287,14 @@ function HeadOfSalesPreview() {
         display: 'flex', flexDirection: 'column', gap: 12,
       }}>
         <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>Client portfolios</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
           {[
-            { code: 'NB', name: 'Nusantara',  book: '76.2', bg: 'linear-gradient(135deg, #FFE4E6, #FECDD3)', fg: '#9F1239' },
-            { code: 'MB', name: 'Maybank',    book: '52.1', bg: 'linear-gradient(135deg, #FEF3C7, #FCD34D)', fg: '#92400E' },
-            { code: 'GX', name: 'GXS',        book: '34.8', bg: 'linear-gradient(135deg, #E0E7FF, #C7D2FE)', fg: '#3730A3' },
-            { code: 'HC', name: 'HomeCredit', book: '21.5', bg: 'linear-gradient(135deg, #DCFCE7, #BBF7D0)', fg: '#166534' },
+            { code: 'MB', name: 'Maybank',  book: '52.1', bg: 'linear-gradient(135deg, #FEF3C7, #FCD34D)', fg: '#92400E' },
+            { code: 'CI', name: 'CIMB',     book: '44.8', bg: 'linear-gradient(135deg, #FFE4E6, #FECDD3)', fg: '#9F1239' },
+            { code: 'RH', name: 'RHB',      book: '38.2', bg: 'linear-gradient(135deg, #EDE9FE, #C4B5FD)', fg: '#5B21B6' },
+            { code: 'CW', name: 'Coway',    book: '24.6', bg: 'linear-gradient(135deg, #CFFAFE, #67E8F9)', fg: '#155E75' },
+            { code: 'MX', name: 'Maxis',    book: '15.4', bg: 'linear-gradient(135deg, #FEF9C3, #FDE68A)', fg: '#713F12' },
+            { code: 'UM', name: 'U Mobile', book:  '9.5', bg: 'linear-gradient(135deg, #F3E8FF, #D8B4FE)', fg: '#6B21A8' },
           ].map((c, i) => (
             <div key={i} style={{
               padding: '12px 10px',
