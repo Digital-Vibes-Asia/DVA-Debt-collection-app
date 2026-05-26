@@ -22,7 +22,7 @@ function BucketCard({ label, amount, count, color, bg, active, onClick, delta })
         <span style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--ink-2)', letterSpacing: '0.01em' }}>{label}</span>
       </div>
       <div style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em' }} className="tnum">
-        S${amount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+        RM {amount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 }}>
         <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>
@@ -528,7 +528,7 @@ function DebtorsScreen({ onOpenDebtor }) {
             <span className="tnum" style={{ color: 'var(--ink-2)', fontWeight: 500 }}>{filtered.length}</span> of <span className="tnum">348</span> accounts
             {activeFilterCount > 0 && (
               <span style={{ marginLeft: 8 }}>
-                · <span className="tnum" style={{ color: 'var(--ink-2)', fontWeight: 500 }}>S${filteredTotalSGD.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span> SGD-equiv balance
+                · <span className="tnum" style={{ color: 'var(--ink-2)', fontWeight: 500 }}>RM {filteredTotalSGD.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span> MYR-equiv balance
               </span>
             )}
           </span>

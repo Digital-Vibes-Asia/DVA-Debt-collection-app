@@ -5,7 +5,7 @@ function Topbar({ title, kicker, breadcrumb, right }) {
   const [regionOpen, setRegionOpen] = useState(false);
   const [newCaseOpen, setNewCaseOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [region, setRegion] = useState({ flag: 'MY', label: 'MY / SG' });
+  const [region, setRegion] = useState({ flag: 'MY', label: 'Malaysia' });
 
   useEffect(() => {
     function onKey(e) {
@@ -117,7 +117,7 @@ function Topbar({ title, kicker, breadcrumb, right }) {
               zIndex: 11,
             }}>
               {[
-                { flag: 'MY', label: 'MY / SG' },
+                { flag: 'MY', label: 'Malaysia' },
                 { flag: 'ID', label: 'Indonesia' },
                 { flag: 'TH', label: 'Thailand' },
                 { flag: 'PH', label: 'Philippines' },
