@@ -261,7 +261,7 @@ function DebtorsScreen({ onOpenDebtor }) {
   const [bucket, setBucket]     = useState('all');
   const [query, setQuery]       = useState('');
   const [assigned, setAssigned] = useState('all');
-  const [markets, setMarkets]   = useState([]); // multi-select
+  const [clients, setClients]   = useState([]); // multi-select
   const [product, setProduct]   = useState('all');
   const [channel, setChannel]   = useState('all');
   const [sort, setSort]         = useState('days-desc');
@@ -307,18 +307,12 @@ function DebtorsScreen({ onOpenDebtor }) {
     ];
   }, [allDebtors]);
 
-  const marketOptions = useMemo(() => {
+  const clientOptions = useMemo(() => {
+    const orgs = window.CLIENT_ORGS || [];
     const counts = {};
-    allDebtors.forEach(d => { counts[d.country] = (counts[d.country] || 0) + 1; });
-    return [
-      { value: 'SG', label: 'Singapore',   flag: 'SG', count: counts.SG || 0 },
-      { value: 'MY', label: 'Malaysia',    flag: 'MY', count: counts.MY || 0 },
-      { value: 'ID', label: 'Indonesia',   flag: 'ID', count: counts.ID || 0 },
-      { value: 'PH', label: 'Philippines', flag: 'PH', count: counts.PH || 0 },
-      { value: 'TH', label: 'Thailand',    flag: 'TH', count: counts.TH || 0 },
-      { value: 'VN', label: 'Vietnam',     flag: 'VN', count: counts.VN || 0 },
-    ];
-  }, [allDebtors]);
+    (window.GENERATED_DEBTORS || []).forEach(d => { counts[d.clientId] = (counts[d.clientId] || 0) + 1; });
+    return orgs.map(o => ({ value: o.id, label: o.name, count: counts[o.id] || 0 }));
+  }, []);
 
   const productOptions = useMemo(() => {
     const counts = {};
@@ -355,7 +349,7 @@ function DebtorsScreen({ onOpenDebtor }) {
     let out = allDebtors.filter(d => {
       if (bucket !== 'all'   && d.bucket !== bucket) return false;
       if (assigned !== 'all' && d.assigned !== assigned) return false;
-      if (markets.length > 0 && !markets.includes(d.country)) return false;
+      if (clients.length > 0 && !clients.includes(d.clientId)) return false;
       if (product !== 'all'  && d.product !== product) return false;
       if (channel !== 'all'  && d.lastChannel !== channel) return false;
       if (query) {
@@ -395,7 +389,7 @@ function DebtorsScreen({ onOpenDebtor }) {
       }
     }
     return out;
-  }, [allDebtors, bucket, assigned, markets, product, channel, query, sort]);
+  }, [allDebtors, bucket, assigned, clients, product, channel, query, sort]);
 
   // SGD-equivalent total of filtered balances (for header)
   const filteredTotalSGD = useMemo(() => {
@@ -405,14 +399,14 @@ function DebtorsScreen({ onOpenDebtor }) {
   const activeFilterCount = [
     bucket !== 'all',
     assigned !== 'all',
-    markets.length > 0,
+    clients.length > 0,
     product !== 'all',
     channel !== 'all',
     !!query,
   ].filter(Boolean).length;
 
   function clearAll() {
-    setBucket('all'); setAssigned('all'); setMarkets([]);
+    setBucket('all'); setAssigned('all'); setClients([]);
     setProduct('all'); setChannel('all'); setQuery('');
   }
 
@@ -452,7 +446,7 @@ function DebtorsScreen({ onOpenDebtor }) {
         <SearchInput value={query} onChange={setQuery} placeholder="Search by name, ID, account…" style={{ width: 280 }} />
         <div style={{ width: 1, height: 22, background: 'var(--line)' }} />
         <FilterDropdown icon="user"     label="Assignee" value={assigned} options={assigneeOptions} onChange={setAssigned} />
-        <MultiFilterDropdown icon="globe" label="Markets" values={markets} options={marketOptions} onChange={setMarkets} />
+        <MultiFilterDropdown icon="building" label="Client" values={clients} options={clientOptions} onChange={setClients} />
         <FilterDropdown icon="tag"      label="Product"  value={product}  options={productOptions}  onChange={setProduct} />
         <FilterDropdown icon="bot"      label="Channel"  value={channel}  options={channelOptions}  onChange={setChannel} />
         {activeFilterCount > 0 && (
