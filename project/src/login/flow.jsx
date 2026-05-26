@@ -349,18 +349,12 @@ const PREVIEWS = {
   'head-of-sales': HeadOfSalesPreview,
 };
 
-// ─── Role selector — each chip is a page link ──────────────────
+// ─── Role selector — large stacked buttons ──────────────────────
 
 function RoleSelector({ value }) {
   const order = ['sales-manager', 'senior-manager', 'head-of-sales'];
   return (
-    <div style={{
-      display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: 6, padding: 4,
-      background: '#FBFAF7',
-      border: '1px solid #EFEDE8',
-      borderRadius: 12,
-    }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {order.map((k) => {
         const r = ROLE_CONFIG[k];
         const active = value === k;
@@ -369,35 +363,54 @@ function RoleSelector({ value }) {
             key={k}
             href={'/login/' + k}
             style={{
-              padding: '10px 10px',
-              background: active ? '#fff' : 'transparent',
-              border: '1px solid ' + (active ? '#E7E5E0' : 'transparent'),
-              borderRadius: 9,
-              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '14px 16px',
+              background: active ? '#fff' : 'rgba(255,255,255,0.55)',
+              border: '2px solid ' + (active ? r.accent : '#E7E5E0'),
+              borderRadius: 12,
+              display: 'flex', alignItems: 'center', gap: 14,
               cursor: 'pointer',
               textDecoration: 'none',
-              boxShadow: active ? '0 1px 2px rgba(11,11,15,0.04)' : 'none',
-              transition: 'all 160ms ease',
+              boxShadow: active ? ('0 4px 16px -4px ' + r.accent + '30') : 'none',
+              transition: 'all 180ms ease',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
+            {/* Subtle accent tint on active */}
+            {active && (
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(135deg, ' + r.accent + '08, transparent 60%)',
+                pointerEvents: 'none',
+              }} />
+            )}
+            {/* Icon */}
             <div style={{
-              width: 26, height: 26, borderRadius: 7,
+              width: 42, height: 42, borderRadius: 11, flexShrink: 0,
               background: active ? r.accent : r.accentSoft,
               color: active ? '#fff' : r.accent,
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'all 160ms ease',
-              flexShrink: 0,
+              transition: 'all 180ms ease',
+              boxShadow: active ? ('0 4px 10px -2px ' + r.accent + '50') : 'none',
             }}>
-              <Icon name={r.icon} size={14} />
+              <Icon name={r.icon} size={20} />
             </div>
-            <div style={{ minWidth: 0, lineHeight: 1.2 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: active ? '#0B0B0F' : '#3F3F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {/* Text */}
+            <div style={{ flex: 1, lineHeight: 1.25 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: active ? '#0B0B0F' : '#3F3F46' }}>
                 {r.title}
               </div>
-              <div style={{ fontSize: 10, color: '#A1A1AA', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ fontSize: 12, color: active ? r.accent : '#A1A1AA', marginTop: 2, fontWeight: active ? 500 : 400 }}>
                 {r.sub}
               </div>
             </div>
+            {/* Active indicator */}
+            {active
+              ? <div style={{ width: 20, height: 20, borderRadius: 999, background: r.accent, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Icon name="check" size={11} color="#fff" strokeWidth={3} />
+                </div>
+              : <Icon name="chevRight" size={16} color="#D4D4D8" />
+            }
           </a>
         );
       })}
