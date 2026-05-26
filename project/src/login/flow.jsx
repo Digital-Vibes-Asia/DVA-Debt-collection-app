@@ -107,7 +107,7 @@ function SalesManagerPreview() {
           padding: '6px 14px', borderBottom: '1px solid #F5F4EE',
           background: '#FAFAF9',
         }}>
-          {['Debtor / Client', 'Product', 'Amount Due', 'Overdue', 'Due'].map((h, i) => (
+          {['Debtor / Client', 'Product', 'Amt Due', 'Days OD', 'Status'].map((h, i) => (
             <div key={i} style={{ fontSize: 10, fontWeight: 600, color: '#A1A1AA', letterSpacing: '0.07em', textTransform: 'uppercase', textAlign: i > 1 ? 'right' : 'left' }}>{h}</div>
           ))}
         </div>
@@ -198,6 +198,21 @@ function SeniorManagerPreview() {
         <div style={{ padding: '10px 14px', borderBottom: '1px solid #F1F1EE', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontSize: 12, fontWeight: 600 }}>Sales managers under you</div>
           <div style={{ fontSize: 11, color: '#A1A1AA' }} className="mono">sort: utilisation ↓</div>
+        </div>
+        {/* Column headers */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: '32px 1fr 80px 80px 1fr 50px',
+          alignItems: 'center', gap: 12,
+          padding: '6px 14px', borderBottom: '1px solid #F5F4EE',
+          background: '#FAFAF9',
+        }}>
+          {['', 'Manager / Region', 'Agents', 'Book', 'Utilisation', 'Status'].map((h, i) => (
+            <div key={i} style={{
+              fontSize: 10, fontWeight: 600, color: '#A1A1AA',
+              letterSpacing: '0.07em', textTransform: 'uppercase',
+              textAlign: i >= 2 && i <= 3 ? 'left' : i === 5 ? 'right' : 'left',
+            }}>{h}</div>
+          ))}
         </div>
         {pods.map((p, i) => (
           <div key={i} style={{
