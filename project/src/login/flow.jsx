@@ -93,38 +93,62 @@ function SalesManagerPreview() {
 
       <div style={{
         background: '#fff', border: '1px solid #EFEDE8', borderRadius: 12,
-        padding: '4px 0',
         boxShadow: '0 24px 48px -28px rgba(11,11,15,0.16)',
         flex: 1, overflow: 'hidden',
       }}>
-        <div style={{ padding: '10px 14px 6px', borderBottom: '1px solid #F1F1EE', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Table header */}
+        <div style={{ padding: '10px 14px', borderBottom: '1px solid #F1F1EE', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontSize: 12, fontWeight: 600 }}>Your work queue · 23 of 23</div>
           <div style={{ fontSize: 11, color: '#A1A1AA' }} className="mono">sorted by due ↓</div>
         </div>
+        {/* Column titles */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1fr 90px 110px 64px 90px',
+          padding: '6px 14px', borderBottom: '1px solid #F5F4EE',
+          background: '#FAFAF9',
+        }}>
+          {['Debtor / Client', 'Product', 'Amount Due', 'Overdue', 'Due'].map((h, i) => (
+            <div key={i} style={{ fontSize: 10, fontWeight: 600, color: '#A1A1AA', letterSpacing: '0.07em', textTransform: 'uppercase', textAlign: i > 1 ? 'right' : 'left' }}>{h}</div>
+          ))}
+        </div>
         {[
-          { name: 'Aishah binti Rahman',    id: 'NB-2841', amt: 'RM 12,450', bucket: '60–89d', tone: '#B45309', bg: '#FEF3C7', due: 'Today' },
-          { name: 'Lim Hui Min',            id: 'NB-2810', amt: 'RM 6,780',  bucket: '30–59d', tone: '#15803D', bg: '#ECFDF3', due: 'Today' },
-          { name: 'Siti Norzahira binti Hamid', id: 'NB-2654', amt: 'RM 45,200', bucket: '90+', tone: '#B91C1C', bg: '#FEE2E2', due: 'Overdue' },
-          { name: 'Ahmad Firdaus bin Ismail', id: 'NB-2839', amt: 'RM 15,800', bucket: '30–59d', tone: '#15803D', bg: '#ECFDF3', due: 'Tomorrow' },
+          { name: 'Aishah binti Rahman',        id: 'MB-2841', client: 'Maybank',  product: 'SME Working Capital', amt: 'RM 12,450', days: '45d', tone: '#B45309', bg: '#FEF3C7', due: 'Today' },
+          { name: 'Lim Hui Min',                id: 'MB-2810', client: 'Maybank',  product: 'Credit Card',         amt: 'RM 6,780',  days: '30d', tone: '#15803D', bg: '#ECFDF3', due: 'Today' },
+          { name: 'Siti Norzahira binti Hamid', id: 'MB-2654', client: 'Maybank',  product: 'SME Term Loan',        amt: 'RM 45,200', days: '124d', tone: '#B91C1C', bg: '#FEE2E2', due: 'Overdue' },
+          { name: 'Ahmad Firdaus bin Ismail',   id: 'MB-2839', client: 'Maybank',  product: 'Invoice Factoring',   amt: 'RM 15,800', days: '12d', tone: '#92400E', bg: '#FEF3C7', due: 'Tomorrow' },
         ].map((r, i) => (
           <div key={i} style={{
-            display: 'flex', alignItems: 'center', gap: 12,
-            padding: '10px 14px',
+            display: 'grid', gridTemplateColumns: '1fr 90px 110px 64px 90px',
+            alignItems: 'center',
+            padding: '9px 14px',
             borderTop: i ? '1px solid #F5F4EE' : 'none',
           }}>
-            <div style={{
-              width: 30, height: 30, borderRadius: 999,
-              background: '#F1F1EE', color: '#3F3F46',
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 600, fontSize: 11,
-            }}>{r.name.split(' ').map(n => n[0]).join('').slice(0, 2)}</div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 600 }}>{r.name}</div>
-              <div style={{ fontSize: 11, color: '#A1A1AA' }} className="mono">{r.id}</div>
+            {/* Debtor + client */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: 999, flexShrink: 0,
+                background: '#F1F1EE', color: '#3F3F46',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 600, fontSize: 10,
+              }}>{r.name.split(' ').map(n => n[0]).join('').slice(0, 2)}</div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
+                <div style={{ fontSize: 10.5, color: '#A1A1AA', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: 999, background: '#FCD34D', display: 'inline-block' }} />
+                  {r.client} · <span className="mono">{r.id}</span>
+                </div>
+              </div>
             </div>
-            <span style={{ fontSize: 10.5, fontWeight: 600, padding: '2px 8px', borderRadius: 999, background: r.bg, color: r.tone }}>{r.bucket}</span>
-            <div style={{ fontSize: 11, color: '#71717A', minWidth: 60, textAlign: 'right' }}>{r.due}</div>
-            <div style={{ fontSize: 13, fontWeight: 600, minWidth: 84, textAlign: 'right' }} className="tnum">{r.amt}</div>
+            {/* Product */}
+            <div style={{ fontSize: 10.5, color: '#3F3F46', paddingRight: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.product}</div>
+            {/* Amount due */}
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0B0B0F', textAlign: 'right' }} className="tnum">{r.amt}</div>
+            {/* Days overdue */}
+            <div style={{ textAlign: 'right' }}>
+              <span style={{ fontSize: 10.5, fontWeight: 600, padding: '2px 7px', borderRadius: 999, background: r.bg, color: r.tone }}>{r.days}</span>
+            </div>
+            {/* Due */}
+            <div style={{ fontSize: 11, color: '#71717A', textAlign: 'right' }}>{r.due}</div>
           </div>
         ))}
       </div>
