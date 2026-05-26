@@ -256,9 +256,295 @@ function MultiFilterDropdown({ icon, label, values, options, onChange }) {
   );
 }
 
+// ─── Vox Queue Modal ───────────────────────────────────────────────
+function VoxQueueModal({ count, onClose, onConfirm }) {
+  const [timeSlot, setTimeSlot] = useState('today-2pm');
+  const [tries, setTries]       = useState(3);
+  const [interval, setInterval] = useState('1h');
+  const [language, setLanguage] = useState('en');
+  const [queued, setQueued]     = useState(false);
+
+  const TIME_SLOTS = [
+    { value: 'today-2pm',      label: 'Today',      sub: '2:00 PM' },
+    { value: 'today-5pm',      label: 'Today',      sub: '5:00 PM' },
+    { value: 'tomorrow-9am',   label: 'Tomorrow',   sub: '9:00 AM' },
+    { value: 'tomorrow-2pm',   label: 'Tomorrow',   sub: '2:00 PM' },
+  ];
+  const TRIES = [1, 2, 3, 5];
+  const INTERVALS = [
+    { value: '30m', label: '30 min' },
+    { value: '1h',  label: '1 hour' },
+    { value: '2h',  label: '2 hours' },
+    { value: '4h',  label: '4 hours' },
+  ];
+  const LANGUAGES = [
+    { value: 'en',  label: 'English' },
+    { value: 'ms',  label: 'Bahasa Malaysia' },
+    { value: 'zh',  label: 'Mandarin' },
+    { value: 'ta',  label: 'Tamil' },
+  ];
+
+  function handleConfirm() {
+    setQueued(true);
+    setTimeout(() => { onConfirm(); onClose(); }, 1400);
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(11,11,15,0.48)',
+        backdropFilter: 'blur(6px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 200,
+        animation: 'fadeIn 180ms ease',
+      }}
+    >
+      <style>{`
+        @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+        @keyframes slideUp { from { opacity:0; transform: translateY(10px) scale(0.98) } to { opacity:1; transform: translateY(0) scale(1) } }
+      `}</style>
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          width: 480,
+          background: '#fff',
+          borderRadius: 18,
+          boxShadow: '0 40px 80px -20px rgba(11,11,15,0.5)',
+          overflow: 'hidden',
+          animation: 'slideUp 260ms cubic-bezier(.2,.8,.2,1)',
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '18px 20px 16px',
+          background: 'linear-gradient(135deg, rgba(99,58,255,0.07), rgba(99,58,255,0.01))',
+          borderBottom: '1px solid var(--line)',
+          display: 'flex', alignItems: 'flex-start', gap: 12,
+        }}>
+          <div style={{
+            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+            background: 'linear-gradient(135deg, #4F46E5, #7C3AED)',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 12px -4px rgba(99,58,255,0.5)',
+          }}>
+            <Icon name="bot" size={19} color="#fff" />
+          </div>
+          <div style={{ flex: 1, lineHeight: 1.25 }}>
+            <div style={{ fontSize: 15, fontWeight: 700 }}>Queue Vox AI Call</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>
+              <span className="tnum" style={{ fontWeight: 600, color: '#4F46E5' }}>{count}</span>
+              {count === 1 ? ' debtor' : ' debtors'} · automated outbound calling
+            </div>
+          </div>
+          <button onClick={onClose} style={{
+            width: 28, height: 28, borderRadius: 7,
+            background: 'transparent', border: '1px solid var(--line)',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', color: 'var(--muted)',
+          }}>
+            <Icon name="close" size={13} />
+          </button>
+        </div>
+
+        <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+          {/* Schedule */}
+          <div>
+            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Schedule</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 7 }}>
+              {TIME_SLOTS.map(t => {
+                const active = timeSlot === t.value;
+                return (
+                  <button
+                    key={t.value}
+                    onClick={() => setTimeSlot(t.value)}
+                    style={{
+                      padding: '9px 8px',
+                      background: active ? '#4F46E5' : '#FAFAF9',
+                      border: '1.5px solid ' + (active ? '#4F46E5' : 'var(--line)'),
+                      borderRadius: 9,
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      transition: 'all 140ms ease',
+                      boxShadow: active ? '0 4px 10px -3px rgba(79,70,229,0.45)' : 'none',
+                    }}
+                  >
+                    <div style={{ fontSize: 11, fontWeight: 700, color: active ? '#fff' : 'var(--ink-2)' }}>{t.label}</div>
+                    <div style={{ fontSize: 12.5, fontWeight: 600, color: active ? 'rgba(255,255,255,0.85)' : 'var(--muted)', marginTop: 2 }}>{t.sub}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Call attempts */}
+          <div>
+            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>
+              Call attempts &nbsp;<span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'none', fontWeight: 400, letterSpacing: 0 }}>per debtor</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 7 }}>
+              {TRIES.map(n => {
+                const active = tries === n;
+                return (
+                  <button
+                    key={n}
+                    onClick={() => setTries(n)}
+                    style={{
+                      padding: '10px 8px',
+                      background: active ? '#0B0B0F' : '#FAFAF9',
+                      border: '1.5px solid ' + (active ? '#0B0B0F' : 'var(--line)'),
+                      borderRadius: 9,
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      transition: 'all 140ms ease',
+                    }}
+                  >
+                    <div style={{ fontSize: 18, fontWeight: 700, color: active ? '#fff' : 'var(--ink)' }}>{n}×</div>
+                    <div style={{ fontSize: 10.5, color: active ? 'rgba(255,255,255,0.6)' : 'var(--muted)', marginTop: 1 }}>{n === 1 ? 'single try' : 'tries'}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Two-column: retry interval + language */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            {/* Retry interval */}
+            <div>
+              <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Retry interval</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                {INTERVALS.map(iv => {
+                  const active = interval === iv.value;
+                  return (
+                    <button
+                      key={iv.value}
+                      onClick={() => setInterval(iv.value)}
+                      style={{
+                        padding: '7px 10px',
+                        background: active ? 'var(--brand-soft)' : 'transparent',
+                        border: '1.5px solid ' + (active ? 'rgba(159,18,57,0.25)' : 'transparent'),
+                        borderRadius: 7,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        transition: 'all 120ms ease',
+                      }}
+                      onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface)'; }}
+                      onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                    >
+                      <span style={{
+                        width: 14, height: 14, borderRadius: 999, flexShrink: 0,
+                        border: '1.5px solid ' + (active ? 'var(--brand)' : 'var(--line)'),
+                        background: active ? 'var(--brand)' : '#fff',
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        {active && <span style={{ width: 5, height: 5, borderRadius: 999, background: '#fff' }} />}
+                      </span>
+                      <span style={{ fontSize: 12.5, fontWeight: active ? 600 : 500, color: active ? 'var(--brand-deep)' : 'var(--ink-2)' }}>{iv.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Language */}
+            <div>
+              <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Call language</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                {LANGUAGES.map(lg => {
+                  const active = language === lg.value;
+                  return (
+                    <button
+                      key={lg.value}
+                      onClick={() => setLanguage(lg.value)}
+                      style={{
+                        padding: '7px 10px',
+                        background: active ? 'var(--brand-soft)' : 'transparent',
+                        border: '1.5px solid ' + (active ? 'rgba(159,18,57,0.25)' : 'transparent'),
+                        borderRadius: 7,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        transition: 'all 120ms ease',
+                      }}
+                      onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface)'; }}
+                      onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                    >
+                      <span style={{
+                        width: 14, height: 14, borderRadius: 999, flexShrink: 0,
+                        border: '1.5px solid ' + (active ? 'var(--brand)' : 'var(--line)'),
+                        background: active ? 'var(--brand)' : '#fff',
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        {active && <span style={{ width: 5, height: 5, borderRadius: 999, background: '#fff' }} />}
+                      </span>
+                      <span style={{ fontSize: 12.5, fontWeight: active ? 600 : 500, color: active ? 'var(--brand-deep)' : 'var(--ink-2)' }}>{lg.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Summary pill */}
+          <div style={{
+            padding: '10px 12px',
+            background: 'linear-gradient(135deg, rgba(79,70,229,0.06), rgba(79,70,229,0.02))',
+            border: '1px solid rgba(79,70,229,0.18)',
+            borderRadius: 9,
+            fontSize: 12, color: 'var(--ink-2)',
+            display: 'flex', alignItems: 'center', gap: 8,
+          }}>
+            <Icon name="bot" size={14} color="#4F46E5" />
+            <span>
+              Vox will call <strong>{count}</strong> debtor{count !== 1 ? 's' : ''}, up to <strong>{tries}×</strong> each,{' '}
+              every <strong>{INTERVALS.find(i => i.value === interval)?.label.toLowerCase()}</strong>,{' '}
+              starting at <strong>{TIME_SLOTS.find(t => t.value === timeSlot)?.sub}</strong> — in <strong>{LANGUAGES.find(l => l.value === language)?.label}</strong>.
+            </span>
+          </div>
+
+          {/* Actions */}
+          <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
+            <button onClick={onClose} style={{
+              height: 42, padding: '0 16px',
+              background: '#fff', color: 'var(--ink-2)',
+              border: '1px solid var(--line)', borderRadius: 10,
+              fontSize: 13.5, fontWeight: 500, cursor: 'pointer',
+            }}>Cancel</button>
+            <button
+              onClick={handleConfirm}
+              disabled={queued}
+              style={{
+                flex: 1, height: 42, padding: '0 16px',
+                background: queued ? '#ECFDF3' : 'linear-gradient(135deg, #4F46E5, #7C3AED)',
+                color: queued ? '#15803D' : '#fff',
+                border: queued ? '1px solid #BBF7D0' : 'none',
+                borderRadius: 10,
+                fontSize: 13.5, fontWeight: 600, cursor: queued ? 'default' : 'pointer',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                boxShadow: queued ? 'none' : '0 8px 20px -8px rgba(79,70,229,0.6)',
+                transition: 'all 240ms ease',
+              }}
+            >
+              {queued ? (
+                <><Icon name="check" size={15} color="#15803D" strokeWidth={2.5} /> Queued successfully</>
+              ) : (
+                <><Icon name="bot" size={15} /> Queue {count} Vox call{count !== 1 ? 's' : ''}</>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DebtorsScreen({ onOpenDebtor }) {
   const [selected, setSelected] = useState(new Set());
   const [bucket, setBucket]     = useState('all');
+  const [voxModal, setVoxModal] = useState(false);
   const [query, setQuery]       = useState('');
   const [assigned, setAssigned] = useState('all');
   const [clients, setClients]   = useState([]); // multi-select
@@ -479,13 +765,22 @@ function DebtorsScreen({ onOpenDebtor }) {
           </span>
           <div style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.15)' }} />
           <Button kind="whatsapp" size="sm" icon="whatsapp">Send WhatsApp blast</Button>
-          <Button kind="vox" size="sm" icon="bot">Queue Vox call</Button>
+          <Button kind="vox" size="sm" icon="bot" onClick={() => setVoxModal(true)}>Queue Vox call</Button>
           <Button kind="secondary" size="sm" icon="workflows" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.18)' }}>Apply workflow</Button>
           <Button kind="secondary" size="sm" icon="user" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.18)' }}>Reassign</Button>
           <div style={{ flex: 1 }} />
           <IconButton icon="close" tone="neutral" onClick={() => setSelected(new Set())} style={{ color: '#fff' }} />
         </div>
       ) : null}
+
+      {/* Vox Queue Modal */}
+      {voxModal && (
+        <VoxQueueModal
+          count={selected.size}
+          onClose={() => setVoxModal(false)}
+          onConfirm={() => { setSelected(new Set()); setVoxModal(false); }}
+        />
+      )}
 
       {/* Table */}
       <div style={{
