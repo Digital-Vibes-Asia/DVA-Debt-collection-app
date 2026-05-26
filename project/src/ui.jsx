@@ -59,9 +59,9 @@ function Button({
   const palettes = {
     primary:    { bg: 'var(--ink)',       fg: '#fff',           border: 'var(--ink)',         hover: '#1A1A21' },
     brand:      { bg: 'var(--brand)',     fg: '#fff',           border: 'var(--brand)',       hover: 'var(--brand-deep)' },
-    secondary:  { bg: '#fff',             fg: 'var(--ink)',     border: 'var(--line)',        hover: '#FAFAF7' },
-    ghost:      { bg: 'transparent',      fg: 'var(--ink)',     border: 'transparent',        hover: 'rgba(0,0,0,0.04)' },
-    danger:     { bg: '#fff',             fg: 'var(--danger)',  border: 'var(--line)',        hover: 'var(--danger-soft)' },
+    secondary:  { bg: 'var(--card)',        fg: 'var(--ink)',     border: 'var(--line)',        hover: 'var(--surface)' },
+    ghost:      { bg: 'transparent',      fg: 'var(--ink)',     border: 'transparent',        hover: 'rgba(128,128,128,0.08)' },
+    danger:     { bg: 'var(--card)',       fg: 'var(--danger)',  border: 'var(--line)',        hover: 'var(--danger-soft)' },
     vox:        { bg: 'var(--vox-soft)',  fg: 'var(--vox-deep)',border: 'rgba(0,184,217,0.3)', hover: '#D9F4F8' },
     whatsapp:   { bg: 'var(--wa)',        fg: '#fff',           border: 'var(--wa)',          hover: 'var(--wa-deep)' },
   };
@@ -162,8 +162,8 @@ function IconButton({ icon, size = 32, iconSize, onClick, tone = 'neutral', acti
 // ---------- Badge ----------
 function Badge({ children, tone = 'neutral', icon, size = 'md', style }) {
   const tones = {
-    neutral:  { bg: '#F1F1EE', fg: 'var(--ink-2)', bd: 'transparent' },
-    soft:     { bg: '#fff',    fg: 'var(--ink-3)', bd: 'var(--line)' },
+    neutral:  { bg: 'var(--surface)',  fg: 'var(--ink-2)', bd: 'transparent' },
+    soft:     { bg: 'var(--card)',    fg: 'var(--ink-3)', bd: 'var(--line)' },
     brand:    { bg: 'var(--brand-soft)', fg: 'var(--brand-deep)', bd: 'rgba(159,18,57,0.12)' },
     success:  { bg: 'var(--success-soft)', fg: 'var(--success)', bd: 'rgba(21,128,61,0.15)' },
     warn:     { bg: 'var(--warn-soft)', fg: 'var(--warn)', bd: 'rgba(180,83,9,0.18)' },
@@ -246,7 +246,7 @@ function SearchInput({ value, onChange, placeholder = 'Search…', style }) {
           padding: '0 12px 0 32px',
           border: '1px solid var(--line)',
           borderRadius: 8,
-          background: '#fff',
+          background: 'var(--card)',
           fontSize: 13,
           color: 'var(--ink)',
           outline: 'none',

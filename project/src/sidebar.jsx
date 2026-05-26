@@ -113,7 +113,7 @@ function Sidebar({ current, onNav }) {
           title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
           style={{
             width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-            background: dark ? '#27272A' : '#F1F1EE',
+            background: dark ? 'var(--card)' : 'var(--surface)',
             border: '1px solid var(--line)',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer', color: dark ? '#E4E4EB' : '#3F3F46',
@@ -141,7 +141,7 @@ function Sidebar({ current, onNav }) {
         <button onClick={() => setOrgOpen(v => !v)} style={{
           width: '100%',
           padding: '8px 10px',
-          background: '#fff',
+          background: 'var(--card)',
           border: '1px solid var(--line)',
           borderRadius: 10,
           display: 'flex',
@@ -172,7 +172,7 @@ function Sidebar({ current, onNav }) {
             <div onClick={() => setOrgOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 20 }} />
             <div style={{
               position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
-              background: '#fff', border: '1px solid var(--line)',
+              background: 'var(--card)', border: '1px solid var(--line)',
               borderRadius: 10, padding: 4,
               boxShadow: 'var(--shadow-lg)',
               zIndex: 21,
@@ -239,7 +239,7 @@ function Sidebar({ current, onNav }) {
                     width: '100%',
                     padding: '8px 10px',
                     margin: '1px 0',
-                    background: active ? '#fff' : 'transparent',
+                    background: active ? 'var(--card)' : 'transparent',
                     border: '1px solid ' + (active ? 'var(--line)' : 'transparent'),
                     borderRadius: 8,
                     display: 'flex',
@@ -341,7 +341,7 @@ function Sidebar({ current, onNav }) {
             <div onClick={() => setUserOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 20 }} />
             <div style={{
               position: 'absolute', bottom: 'calc(100% + 4px)', left: 8, right: 8,
-              background: '#fff', border: '1px solid var(--line)',
+              background: 'var(--card)', border: '1px solid var(--line)',
               borderRadius: 10, padding: 4,
               boxShadow: 'var(--shadow-lg)',
               zIndex: 21,

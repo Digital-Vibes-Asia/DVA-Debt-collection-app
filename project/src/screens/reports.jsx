@@ -5,7 +5,7 @@ function ReportsScreen() {
     <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Period selector */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ display: 'inline-flex', background: '#fff', border: '1px solid var(--line)', borderRadius: 9, padding: 3 }}>
+        <div style={{ display: 'inline-flex', background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 9, padding: 3 }}>
           {['Today', 'Week', 'Month', 'Quarter', 'YTD'].map((p, i) => (
             <button key={p} style={{
               padding: '6px 12px',

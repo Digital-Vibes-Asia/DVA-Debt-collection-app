@@ -175,7 +175,7 @@ function PlanBuilder() {
             }}>
               <span style={{
                 width: 22, height: 22, borderRadius: 11, fontSize: 11, fontWeight: 600,
-                background: '#fff', color: 'var(--ink-2)',
+                background: 'var(--card)', color: 'var(--ink-2)',
                 border: '1px solid var(--line)',
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               }}>{i + 1}</span>

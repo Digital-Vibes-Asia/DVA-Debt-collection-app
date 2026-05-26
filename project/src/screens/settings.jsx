@@ -303,7 +303,7 @@ function ToggleRow({ l, sub, on }) {
       }}>
         <span style={{
           position: 'absolute', top: 2, left: v ? 16 : 2,
-          width: 14, height: 14, borderRadius: 7, background: '#fff',
+          width: 14, height: 14, borderRadius: 7, background: 'var(--card)',
           transition: 'left 160ms ease',
         }} />
       </button>

@@ -157,7 +157,7 @@ function Modal({ open, onClose, title, subtitle, children, width = 480, footer, 
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%', maxWidth: width,
-          background: dark ? 'linear-gradient(180deg, #0B0B0F, #1A1A21)' : '#fff',
+          background: dark ? 'linear-gradient(180deg, #0B0B0F, #1A1A21)' : 'var(--card)',
           color: dark ? '#fff' : 'var(--ink)',
           border: dark ? '1px solid rgba(255,255,255,0.1)' : '1px solid var(--line)',
           borderRadius: 16,

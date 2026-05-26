@@ -668,7 +668,7 @@ function CallContextRail({ suggestion, onApprove, onModify, onCancelModify, onSa
   return (
     <div style={{
       borderLeft: '1px solid var(--line)',
-      background: '#fff',
+      background: 'var(--card)',
       overflowY: 'auto',
       padding: 16,
       display: 'flex', flexDirection: 'column', gap: 14,
@@ -789,7 +789,7 @@ function Signal({ tone, icon, label, desc }) {
   return (
     <div style={{
       padding: 10,
-      background: '#fff',
+      background: 'var(--card)',
       border: '1px solid var(--line)',
       borderRadius: 8,
       display: 'flex', gap: 10, alignItems: 'flex-start',

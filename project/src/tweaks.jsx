@@ -76,7 +76,7 @@ function TweaksPanel() {
       position: 'fixed',
       right: pos.x, bottom: pos.y,
       width: 280,
-      background: '#fff',
+      background: 'var(--card)',
       border: '1px solid var(--line)',
       borderRadius: 14,
       boxShadow: '0 24px 48px -16px rgba(11,11,15,0.25), 0 8px 24px -8px rgba(11,11,15,0.12)',
@@ -173,7 +173,7 @@ function ToggleField({ label, desc, on, onChange }) {
       }}>
         <span style={{
           position: 'absolute', top: 2, left: on ? 16 : 2,
-          width: 16, height: 16, borderRadius: 8, background: '#fff',
+          width: 16, height: 16, borderRadius: 8, background: 'var(--card)',
           transition: 'left 160ms ease',
           boxShadow: '0 1px 2px rgba(0,0,0,0.18)',
         }} />

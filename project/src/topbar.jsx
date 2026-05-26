@@ -62,7 +62,7 @@ function Topbar({ title, kicker, breadcrumb, right }) {
       <button onClick={() => setCmdOpen(true)} style={{
         height: 34,
         padding: '0 10px 0 12px',
-        background: '#fff',
+        background: 'var(--card)',
         border: '1px solid var(--line)',
         borderRadius: 8,
         display: 'inline-flex',
@@ -91,7 +91,7 @@ function Topbar({ title, kicker, breadcrumb, right }) {
         <button onClick={() => setRegionOpen(v => !v)} style={{
           height: 34,
           padding: '0 10px',
-          background: '#fff',
+          background: 'var(--card)',
           border: '1px solid var(--line)',
           borderRadius: 8,
           display: 'inline-flex',
@@ -111,7 +111,7 @@ function Topbar({ title, kicker, breadcrumb, right }) {
             <div style={{
               position: 'absolute', top: 38, right: 0,
               minWidth: 180,
-              background: '#fff', border: '1px solid var(--line)',
+              background: 'var(--card)', border: '1px solid var(--line)',
               borderRadius: 10, padding: 4,
               boxShadow: 'var(--shadow-lg)',
               zIndex: 11,
@@ -278,7 +278,7 @@ const inputStyle = {
   padding: '0 12px',
   border: '1px solid var(--line)',
   borderRadius: 8,
-  background: '#fff',
+  background: 'var(--card)',
   fontSize: 13.5,
   color: 'var(--ink)',
   outline: 'none',
@@ -293,7 +293,7 @@ function SegmentedControl({ options, value, onChange }) {
         return (
           <button key={o.v} onClick={() => onChange(o.v)} style={{
             flex: 1, padding: '6px 8px',
-            background: a ? '#fff' : 'transparent',
+            background: a ? 'var(--card)' : 'transparent',
             border: a ? '1px solid var(--line)' : '1px solid transparent',
             borderRadius: 6,
             fontSize: 12.5, color: a ? 'var(--ink)' : 'var(--muted)',

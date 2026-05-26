@@ -220,9 +220,9 @@ function QuickAction({ icon, label, tone, onClick }) {
     wa:      { bg: 'var(--wa)', fg: '#fff', border: 'var(--wa)' },
     vox:     { bg: 'linear-gradient(135deg,#0B0B0F,#1A1A21)', fg: 'var(--vox)', border: 'rgba(0,184,217,0.35)' },
     brand:   { bg: 'var(--brand-soft)', fg: 'var(--brand-deep)', border: 'rgba(159,18,57,0.18)' },
-    neutral: { bg: '#fff', fg: 'var(--ink)', border: 'var(--line)' },
+    neutral: { bg: 'var(--card)', fg: 'var(--ink)', border: 'var(--line)' },
     warnTone:   { bg: 'var(--warn-soft)',   fg: 'var(--warn)',   border: 'rgba(180,83,9,0.18)' },
-    softTone:   { bg: '#fff',                fg: 'var(--ink-2)', border: 'var(--line)' },
+    softTone:   { bg: 'var(--card)',          fg: 'var(--ink-2)', border: 'var(--line)' },
     dangerTone: { bg: 'var(--danger-soft)',  fg: 'var(--danger)', border: 'rgba(185,28,28,0.18)' },
   };
   const p = tones[tone];
@@ -312,7 +312,7 @@ const KIND_META = {
   'whatsapp-vox': { icon: 'whatsapp',  color: 'var(--wa-deep)', bg: '#E8FFF1', label: 'WhatsApp · Vox' },
   call:           { icon: 'phone',     color: 'var(--ink-2)',   bg: 'var(--surface)', label: 'Call' },
   'vox-call':     { icon: 'bot',       color: 'var(--vox-deep)', bg: 'var(--vox-soft)', label: 'Vox call' },
-  sms:            { icon: 'sms',       color: 'var(--muted)',   bg: '#F1F1EE', label: 'SMS' },
+  sms:            { icon: 'sms',       color: 'var(--muted)',   bg: 'var(--surface)', label: 'SMS' },
   payment:        { icon: 'cash',      color: 'var(--success)', bg: 'var(--success-soft)', label: 'Payment' },
   plan:           { icon: 'plans',     color: 'var(--brand-deep)', bg: 'var(--brand-soft)', label: 'Plan' },
   note:           { icon: 'edit',      color: 'var(--ink-3)',   bg: 'var(--surface)', label: 'Note' },

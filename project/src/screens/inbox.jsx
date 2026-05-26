@@ -343,7 +343,7 @@ function InboxScreen({ onOpenDebtor }) {
         <div style={{
           margin: '0 12px 12px',
           padding: 10,
-          background: '#fff',
+          background: 'var(--card)',
           border: '1px solid var(--line)',
           borderRadius: 14,
           boxShadow: 'var(--shadow-sm)',
@@ -536,7 +536,7 @@ function ContextPanel({ debtor, onOpenDebtor, onUseQuickReply, language, onChang
         </div>
 
         {/* Language picker */}
-        <div style={{ display: 'flex', gap: 3, padding: 2, background: '#fff', border: '1px solid var(--line)', borderRadius: 7, marginBottom: 8 }}>
+        <div style={{ display: 'flex', gap: 3, padding: 2, background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 7, marginBottom: 8 }}>
           {[
             { v: 'auto', l: 'Auto' },
             { v: 'en',   l: 'EN' },
@@ -571,7 +571,7 @@ function ContextPanel({ debtor, onOpenDebtor, onUseQuickReply, language, onChang
                 title={preview}
                 style={{
                   padding: '8px 10px',
-                  background: '#fff',
+                  background: 'var(--card)',
                   border: '1px solid var(--line)',
                   borderRadius: 8,
                   fontSize: 12.5,

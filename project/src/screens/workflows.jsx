@@ -121,7 +121,7 @@ function WorkflowsScreen() {
             <Connector />
             <div style={{
               padding: '10px 16px',
-              background: '#fff',
+              background: 'var(--card)',
               border: '1px dashed var(--line)',
               borderRadius: 10,
               color: 'var(--muted)',
@@ -203,7 +203,7 @@ function StepNode({ step }) {
     }}>
       <div style={{
         width: 36, height: 36, borderRadius: 10,
-        background: '#fff', color: p.fg,
+        background: 'var(--card)', color: p.fg,
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         border: `1px solid ${p.bd}`,
         flexShrink: 0,
@@ -216,7 +216,7 @@ function StepNode({ step }) {
       </div>
       <span style={{
         fontSize: 10.5, padding: '3px 7px', borderRadius: 5,
-        background: '#fff', color: 'var(--muted)', border: '1px solid var(--line)',
+        background: 'var(--card)', color: 'var(--muted)', border: '1px solid var(--line)',
         fontFamily: 'var(--font-mono)', fontWeight: 500,
       }}>{step.day}</span>
       <IconButton icon="more" size={26} iconSize={14} />

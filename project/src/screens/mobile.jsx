@@ -135,7 +135,7 @@ function MobileHome() {
         {items.map((d, i) => (
           <div key={d.id} style={{
             margin: '6px 0', padding: 10,
-            background: '#fff', border: '1px solid var(--line)', borderRadius: 12,
+            background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 12,
             display: 'flex', alignItems: 'center', gap: 10,
           }}>
             <Avatar name={d.name} size={32} />
@@ -161,7 +161,7 @@ function MobileHome() {
 function MobStat({ l, v, accent }) {
   const color = accent === 'wa' ? 'var(--wa-deep)' : accent === 'brand' ? 'var(--brand)' : 'var(--ink)';
   return (
-    <div style={{ flex: 1, padding: '8px 10px', background: '#fff', border: '1px solid var(--line)', borderRadius: 10 }}>
+    <div style={{ flex: 1, padding: '8px 10px', background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 10 }}>
       <div style={{ fontSize: 9.5, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{l}</div>
       <div style={{ fontSize: 16, fontWeight: 700, color, marginTop: 1 }} className="tnum">{v}</div>
     </div>
@@ -284,7 +284,7 @@ function MobileWhatsApp() {
   const thread = THREADS[0];
   return (
     <div style={{ height: 'calc(100% - 36px)', background: '#FBF9F4', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ padding: '6px 14px 10px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid var(--line)', background: '#fff' }}>
+      <div style={{ padding: '6px 14px 10px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid var(--line)', background: 'var(--card)' }}>
         <Icon name="chevLeft" size={20} color="var(--brand)" />
         <Avatar name={thread.name} size={32} />
         <div style={{ flex: 1, lineHeight: 1.2 }}>
@@ -321,13 +321,13 @@ function MobileWhatsApp() {
           </div>
           <div style={{ display: 'flex', gap: 4 }}>
             <button style={{ flex: 1, padding: '5px 0', background: 'var(--vox-deep)', color: '#fff', border: 'none', borderRadius: 6, fontSize: 11, fontWeight: 600 }}>Use draft</button>
-            <button style={{ padding: '5px 8px', background: '#fff', border: '1px solid var(--line)', borderRadius: 6, fontSize: 11, fontWeight: 500 }}>Edit</button>
+            <button style={{ padding: '5px 8px', background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 6, fontSize: 11, fontWeight: 500 }}>Edit</button>
           </div>
         </div>
       </div>
 
       {/* Composer */}
-      <div style={{ padding: 10, borderTop: '1px solid var(--line)', background: '#fff', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ padding: 10, borderTop: '1px solid var(--line)', background: 'var(--card)', display: 'flex', alignItems: 'center', gap: 8 }}>
         <Icon name="plus" size={18} color="var(--muted)" />
         <div style={{ flex: 1, height: 32, padding: '0 12px', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 16, display: 'flex', alignItems: 'center', fontSize: 12, color: 'var(--muted)' }}>
           Message…

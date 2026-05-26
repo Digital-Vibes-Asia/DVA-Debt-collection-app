@@ -218,7 +218,7 @@ function DisputeDetail({ dispute, onOpenDebtor, onSubmitDecision }) {
               SLA — <span className="tnum">{d.slaHours}h</span> remaining for initial decision
             </span>
             <div style={{ flex: 1 }} />
-            <div style={{ width: 120, height: 5, background: '#fff', borderRadius: 3, overflow: 'hidden', border: '1px solid var(--line-2)' }}>
+            <div style={{ width: 120, height: 5, background: 'var(--card)', borderRadius: 3, overflow: 'hidden', border: '1px solid var(--line-2)' }}>
               <div style={{
                 width: `${Math.min(100, 100 - (d.slaHours / 72 * 100))}%`,
                 height: '100%',
@@ -274,7 +274,7 @@ function DisputeDetail({ dispute, onOpenDebtor, onSubmitDecision }) {
                 }}>
                   <div style={{
                     width: 30, height: 30, borderRadius: 6,
-                    background: '#fff', color: 'var(--ink-3)',
+                    background: 'var(--card)', color: 'var(--ink-3)',
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                     border: '1px solid var(--line)',
                   }}>
@@ -347,7 +347,7 @@ function DisputeDetail({ dispute, onOpenDebtor, onSubmitDecision }) {
                 </span>
               </div>
               <div style={{
-                padding: 10, background: '#fff', borderRadius: 8,
+                padding: 10, background: 'var(--card)', borderRadius: 8,
                 border: '1px solid rgba(0,184,217,0.25)',
                 marginBottom: 10,
               }}>
@@ -364,7 +364,7 @@ function DisputeDetail({ dispute, onOpenDebtor, onSubmitDecision }) {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--muted)' }}>
                 <span>Confidence</span>
-                <div style={{ flex: 1, height: 5, background: '#fff', borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ flex: 1, height: 5, background: 'var(--card)', borderRadius: 3, overflow: 'hidden' }}>
                   <div style={{ width: `${d.recommendation.confidence * 100}%`, height: '100%', background: 'var(--vox-deep)' }} />
                 </div>
                 <span className="tnum" style={{ fontWeight: 600, color: 'var(--vox-deep)' }}>{Math.round(d.recommendation.confidence * 100)}%</span>
@@ -587,7 +587,7 @@ function ResolvedSummary({ dispute, debtor }) {
       )}
 
       <div style={{
-        padding: 10, background: '#fff',
+        padding: 10, background: 'var(--card)',
         border: '1px solid rgba(18,140,126,0.2)',
         borderRadius: 8,
       }}>
@@ -622,7 +622,7 @@ function DecisionToast({ toast, onClose }) {
       position: 'fixed',
       top: 80, right: 24,
       width: 360,
-      background: '#fff',
+      background: 'var(--card)',
       border: '1px solid var(--line)',
       borderRadius: 12,
       boxShadow: 'var(--shadow-lg)',

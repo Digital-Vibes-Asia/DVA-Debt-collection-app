@@ -48,7 +48,7 @@ function ReviewCard({ r, active, onClick }) {
     <button onClick={onClick} style={{
       minWidth: 220,
       padding: 14,
-      background: '#fff',
+      background: 'var(--card)',
       border: '2px solid ' + (active ? 'var(--ink)' : 'var(--line)'),
       borderRadius: 12,
       textAlign: 'left',
@@ -403,7 +403,7 @@ function TextField({ label, value, delta }) {
   return (
     <div style={{
       padding: '10px 12px',
-      background: '#fff',
+      background: 'var(--card)',
       border: '1px solid var(--line)',
       borderRadius: 8,
       display: 'flex', alignItems: 'center',

@@ -246,7 +246,7 @@ function LegalPacket({ c, onOpenDebtor }) {
                 }}>
                   <div style={{
                     width: 28, height: 28, borderRadius: 7,
-                    background: '#fff', color: 'var(--ink-3)',
+                    background: 'var(--card)', color: 'var(--ink-3)',
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                     border: '1px solid var(--line)',
                     flexShrink: 0,

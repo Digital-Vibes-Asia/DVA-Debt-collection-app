@@ -8,7 +8,7 @@ function BucketCard({ label, amount, count, color, bg, active, onClick, delta })
         flex: 1,
         minWidth: 0,
         padding: '14px 16px',
-        background: active ? bg : '#fff',
+        background: active ? bg : 'var(--card)',
         border: `1px solid ${active ? color + '30' : 'var(--line)'}`,
         borderRadius: 12,
         textAlign: 'left',
@@ -45,7 +45,7 @@ function FilterChip({ children, icon, active, onClick, hasMenu = true }) {
       style={{
         height: 30,
         padding: '0 10px',
-        background: active ? 'var(--ink)' : '#fff',
+        background: active ? 'var(--ink)' : 'var(--card)',
         color: active ? '#fff' : 'var(--ink-2)',
         border: `1px solid ${active ? 'var(--ink)' : 'var(--line)'}`,
         borderRadius: 8,
@@ -96,7 +96,7 @@ function FilterDropdown({ icon, label, value, options, onChange }) {
           top: 'calc(100% + 6px)',
           left: 0,
           minWidth: 200,
-          background: '#fff',
+          background: 'var(--card)',
           border: '1px solid var(--line)',
           borderRadius: 10,
           boxShadow: 'var(--shadow-lg)',
@@ -181,7 +181,7 @@ function MultiFilterDropdown({ icon, label, values, options, onChange }) {
           top: 'calc(100% + 6px)',
           left: 0,
           minWidth: 220,
-          background: '#fff',
+          background: 'var(--card)',
           border: '1px solid var(--line)',
           borderRadius: 10,
           boxShadow: 'var(--shadow-lg)',
@@ -235,7 +235,7 @@ function MultiFilterDropdown({ icon, label, values, options, onChange }) {
                 <span style={{
                   width: 14, height: 14, borderRadius: 4,
                   border: `1.5px solid ${checked ? 'var(--brand)' : 'var(--line)'}`,
-                  background: checked ? 'var(--brand)' : '#fff',
+                  background: checked ? 'var(--brand)' : 'var(--card)',
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
@@ -354,7 +354,7 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
         style={{
           width: 540,
           maxHeight: '90vh',
-          background: '#fff',
+          background: 'var(--card)',
           borderRadius: 18,
           boxShadow: '0 40px 80px -20px rgba(11,11,15,0.5)',
           overflow: 'hidden',
@@ -412,7 +412,7 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
                   alignItems: 'center', gap: 10,
                   padding: '9px 12px',
                   borderTop: i ? '1px solid var(--line-2)' : 'none',
-                  background: i % 2 === 0 ? '#fff' : '#FAFAF9',
+                  background: i % 2 === 0 ? 'var(--card)' : 'var(--surface-2)',
                 }}>
                   <Avatar name={d.name} size={26} />
                   <div style={{ minWidth: 0 }}>
@@ -440,7 +440,7 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
                     onClick={() => setTemplate(t.value)}
                     style={{
                       padding: '10px 12px',
-                      background: active ? 'rgba(18,140,126,0.06)' : '#FAFAF9',
+                      background: active ? 'rgba(18,140,126,0.06)' : 'var(--surface-2)',
                       border: '1.5px solid ' + (active ? '#128C7E' : 'var(--line)'),
                       borderRadius: 9, cursor: 'pointer', textAlign: 'left',
                       display: 'flex', alignItems: 'center', gap: 10,
@@ -449,7 +449,7 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
                   >
                     <div style={{
                       width: 30, height: 30, borderRadius: 8, flexShrink: 0,
-                      background: active ? '#128C7E' : '#F1F1EE',
+                      background: active ? '#128C7E' : 'var(--surface)',
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                     }}>
                       <Icon name={t.icon} size={14} color={active ? '#fff' : 'var(--muted)'} />
@@ -481,7 +481,7 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
                     onClick={() => setLanguage(lg.value)}
                     style={{
                       padding: '8px 6px',
-                      background: active ? '#128C7E' : '#FAFAF9',
+                      background: active ? '#128C7E' : 'var(--surface-2)',
                       border: '1.5px solid ' + (active ? '#128C7E' : 'var(--line)'),
                       borderRadius: 9, cursor: 'pointer', textAlign: 'center',
                       transition: 'all 140ms ease',
@@ -527,7 +527,7 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
               </div>
               {/* Bubble */}
               <div style={{
-                background: '#fff',
+                background: 'var(--card)',
                 borderRadius: '4px 12px 12px 12px',
                 padding: '10px 12px',
                 fontSize: 12.5, lineHeight: 1.6,
@@ -550,11 +550,11 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
           padding: '14px 20px',
           borderTop: '1px solid var(--line)',
           display: 'flex', gap: 8, flexShrink: 0,
-          background: '#fff',
+          background: 'var(--card)',
         }}>
           <button onClick={onClose} style={{
             height: 42, padding: '0 16px',
-            background: '#fff', color: 'var(--ink-2)',
+            background: 'var(--card)', color: 'var(--ink-2)',
             border: '1px solid var(--line)', borderRadius: 10,
             fontSize: 13.5, fontWeight: 500, cursor: 'pointer',
           }}>Cancel</button>
@@ -564,7 +564,7 @@ function WhatsAppBlastModal({ debtors, onClose, onConfirm }) {
             style={{
               flex: 1, height: 42, padding: '0 16px',
               background: sent ? '#ECFDF3' : 'linear-gradient(135deg, #128C7E, #25D366)',
-              color: sent ? '#15803D' : '#fff',
+              color: sent ? '#15803D' : 'var(--card)',
               border: sent ? '1px solid #BBF7D0' : 'none',
               borderRadius: 10,
               fontSize: 13.5, fontWeight: 600, cursor: sent ? 'default' : 'pointer',
@@ -663,7 +663,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
         onClick={e => e.stopPropagation()}
         style={{
           width: 480,
-          background: '#fff',
+          background: 'var(--card)',
           borderRadius: 18,
           boxShadow: '0 40px 80px -20px rgba(11,11,15,0.5)',
           overflow: 'hidden',
@@ -716,7 +716,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                     onClick={() => setTimeSlot(t.value)}
                     style={{
                       padding: '9px 6px',
-                      background: active ? '#4F46E5' : '#FAFAF9',
+                      background: active ? '#4F46E5' : 'var(--surface-2)',
                       border: '1.5px solid ' + (active ? '#4F46E5' : 'var(--line)'),
                       borderRadius: 9,
                       cursor: 'pointer',
@@ -738,7 +738,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                     onClick={selectCustom}
                     style={{
                       padding: '9px 6px',
-                      background: active ? '#4F46E5' : '#FAFAF9',
+                      background: active ? '#4F46E5' : 'var(--surface-2)',
                       border: '1.5px solid ' + (active ? '#4F46E5' : 'var(--line)'),
                       borderRadius: 9,
                       cursor: 'pointer',
@@ -779,7 +779,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                         width: '100%',
                         height: 34,
                         padding: '0 10px',
-                        background: '#fff',
+                        background: 'var(--card)',
                         border: '1.5px solid rgba(79,70,229,0.25)',
                         borderRadius: 7,
                         fontSize: 13,
@@ -801,7 +801,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                         width: '100%',
                         height: 34,
                         padding: '0 10px',
-                        background: '#fff',
+                        background: 'var(--card)',
                         border: '1.5px solid rgba(79,70,229,0.25)',
                         borderRadius: 7,
                         fontSize: 13,
@@ -832,7 +832,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                     onClick={() => setTries(n)}
                     style={{
                       padding: '10px 8px',
-                      background: active ? '#0B0B0F' : '#FAFAF9',
+                      background: active ? '#0B0B0F' : 'var(--surface-2)',
                       border: '1.5px solid ' + (active ? '#0B0B0F' : 'var(--line)'),
                       borderRadius: 9,
                       cursor: 'pointer',
@@ -876,10 +876,10 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                       <span style={{
                         width: 14, height: 14, borderRadius: 999, flexShrink: 0,
                         border: '1.5px solid ' + (active ? 'var(--brand)' : 'var(--line)'),
-                        background: active ? 'var(--brand)' : '#fff',
+                        background: active ? 'var(--brand)' : 'var(--card)',
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        {active && <span style={{ width: 5, height: 5, borderRadius: 999, background: '#fff' }} />}
+                        {active && <span style={{ width: 5, height: 5, borderRadius: 999, background: 'var(--card)' }} />}
                       </span>
                       <span style={{ fontSize: 12.5, fontWeight: active ? 600 : 500, color: active ? 'var(--brand-deep)' : 'var(--ink-2)' }}>{iv.label}</span>
                     </button>
@@ -914,10 +914,10 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                       <span style={{
                         width: 14, height: 14, borderRadius: 999, flexShrink: 0,
                         border: '1.5px solid ' + (active ? 'var(--brand)' : 'var(--line)'),
-                        background: active ? 'var(--brand)' : '#fff',
+                        background: active ? 'var(--brand)' : 'var(--card)',
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        {active && <span style={{ width: 5, height: 5, borderRadius: 999, background: '#fff' }} />}
+                        {active && <span style={{ width: 5, height: 5, borderRadius: 999, background: 'var(--card)' }} />}
                       </span>
                       <span style={{ fontSize: 12.5, fontWeight: active ? 600 : 500, color: active ? 'var(--brand-deep)' : 'var(--ink-2)' }}>{lg.label}</span>
                     </button>
@@ -948,7 +948,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
           <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
             <button onClick={onClose} style={{
               height: 42, padding: '0 16px',
-              background: '#fff', color: 'var(--ink-2)',
+              background: 'var(--card)', color: 'var(--ink-2)',
               border: '1px solid var(--line)', borderRadius: 10,
               fontSize: 13.5, fontWeight: 500, cursor: 'pointer',
             }}>Cancel</button>
@@ -958,7 +958,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
               style={{
                 flex: 1, height: 42, padding: '0 16px',
                 background: queued ? '#ECFDF3' : 'linear-gradient(135deg, #4F46E5, #7C3AED)',
-                color: queued ? '#15803D' : '#fff',
+                color: queued ? '#15803D' : 'var(--card)',
                 border: queued ? '1px solid #BBF7D0' : 'none',
                 borderRadius: 10,
                 fontSize: 13.5, fontWeight: 600, cursor: queued ? 'default' : 'pointer',
@@ -1166,7 +1166,7 @@ function DebtorsScreen({ onOpenDebtor }) {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
         padding: '12px 14px',
-        background: '#fff', border: '1px solid var(--line)', borderRadius: 12,
+        background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 12,
         flexWrap: 'wrap',
       }}>
         <SearchInput value={query} onChange={setQuery} placeholder="Search by name, ID, account…" style={{ width: 280 }} />
@@ -1197,7 +1197,7 @@ function DebtorsScreen({ onOpenDebtor }) {
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
           padding: '10px 14px',
-          background: 'var(--ink)', color: '#fff', borderRadius: 10,
+          background: 'var(--ink)', color: 'var(--card)', borderRadius: 10,
           boxShadow: 'var(--shadow-md)',
         }}>
           <span style={{ fontSize: 13, fontWeight: 500 }}>
@@ -1206,10 +1206,10 @@ function DebtorsScreen({ onOpenDebtor }) {
           <div style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.15)' }} />
           <Button kind="whatsapp" size="sm" icon="whatsapp" onClick={() => setWaModal(true)}>Send WhatsApp blast</Button>
           <Button kind="vox" size="sm" icon="bot" onClick={() => setVoxModal(true)}>Queue Vox call</Button>
-          <Button kind="secondary" size="sm" icon="workflows" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.18)' }}>Apply workflow</Button>
-          <Button kind="secondary" size="sm" icon="user" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.18)' }}>Reassign</Button>
+          <Button kind="secondary" size="sm" icon="workflows" style={{ background: 'rgba(255,255,255,0.08)', color: 'var(--card)', border: '1px solid rgba(255,255,255,0.18)' }}>Apply workflow</Button>
+          <Button kind="secondary" size="sm" icon="user" style={{ background: 'rgba(255,255,255,0.08)', color: 'var(--card)', border: '1px solid rgba(255,255,255,0.18)' }}>Reassign</Button>
           <div style={{ flex: 1 }} />
-          <IconButton icon="close" tone="neutral" onClick={() => setSelected(new Set())} style={{ color: '#fff' }} />
+          <IconButton icon="close" tone="neutral" onClick={() => setSelected(new Set())} style={{ color: 'var(--card)' }} />
         </div>
       ) : null}
 
@@ -1233,7 +1233,7 @@ function DebtorsScreen({ onOpenDebtor }) {
 
       {/* Table */}
       <div style={{
-        background: '#fff',
+        background: 'var(--card)',
         border: '1px solid var(--line)',
         borderRadius: 12,
         overflow: 'hidden',
@@ -1332,7 +1332,7 @@ function DebtorRow({ d, checked, onCheck, onOpen, last }) {
       onMouseLeave={() => setHover(false)}
       onClick={onOpen}
       style={{
-        background: hover ? 'var(--surface-2)' : '#fff',
+        background: hover ? 'var(--surface-2)' : 'var(--card)',
         cursor: 'pointer',
         borderBottom: last ? 'none' : '1px solid var(--line-2)',
       }}
