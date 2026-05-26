@@ -258,17 +258,42 @@ function MultiFilterDropdown({ icon, label, values, options, onChange }) {
 
 // ─── Vox Queue Modal ───────────────────────────────────────────────
 function VoxQueueModal({ count, onClose, onConfirm }) {
-  const [timeSlot, setTimeSlot] = useState('today-2pm');
-  const [tries, setTries]       = useState(3);
-  const [interval, setInterval] = useState('1h');
-  const [language, setLanguage] = useState('en');
-  const [queued, setQueued]     = useState(false);
+  const [timeSlot, setTimeSlot]     = useState('today-2pm');
+  const [customDate, setCustomDate] = useState('');
+  const [customTime, setCustomTime] = useState('');
+  const [tries, setTries]           = useState(3);
+  const [interval, setInterval]     = useState('1h');
+  const [language, setLanguage]     = useState('en');
+  const [queued, setQueued]         = useState(false);
+
+  // Auto-fill today's date when switching to custom
+  function selectCustom() {
+    setTimeSlot('custom');
+    if (!customDate) {
+      const d = new Date();
+      setCustomDate(d.toISOString().split('T')[0]);
+    }
+    if (!customTime) setCustomTime('10:00');
+  }
+
+  // Human-readable label for the summary sentence
+  function scheduleLabel() {
+    if (timeSlot === 'custom') {
+      if (customDate && customTime) {
+        const d = new Date(customDate + 'T' + customTime);
+        return d.toLocaleString('en-MY', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      }
+      return 'custom time';
+    }
+    const slot = TIME_SLOTS.find(t => t.value === timeSlot);
+    return slot ? slot.label + ' ' + slot.sub : '';
+  }
 
   const TIME_SLOTS = [
-    { value: 'today-2pm',      label: 'Today',      sub: '2:00 PM' },
-    { value: 'today-5pm',      label: 'Today',      sub: '5:00 PM' },
-    { value: 'tomorrow-9am',   label: 'Tomorrow',   sub: '9:00 AM' },
-    { value: 'tomorrow-2pm',   label: 'Tomorrow',   sub: '2:00 PM' },
+    { value: 'today-2pm',    label: 'Today',    sub: '2:00 PM' },
+    { value: 'today-5pm',    label: 'Today',    sub: '5:00 PM' },
+    { value: 'tomorrow-9am', label: 'Tomorrow', sub: '9:00 AM' },
+    { value: 'tomorrow-2pm', label: 'Tomorrow', sub: '2:00 PM' },
   ];
   const TRIES = [1, 2, 3, 5];
   const INTERVALS = [
@@ -353,7 +378,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
           {/* Schedule */}
           <div>
             <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Schedule</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 7 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 7 }}>
               {TIME_SLOTS.map(t => {
                 const active = timeSlot === t.value;
                 return (
@@ -361,7 +386,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                     key={t.value}
                     onClick={() => setTimeSlot(t.value)}
                     style={{
-                      padding: '9px 8px',
+                      padding: '9px 6px',
                       background: active ? '#4F46E5' : '#FAFAF9',
                       border: '1.5px solid ' + (active ? '#4F46E5' : 'var(--line)'),
                       borderRadius: 9,
@@ -371,12 +396,97 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
                       boxShadow: active ? '0 4px 10px -3px rgba(79,70,229,0.45)' : 'none',
                     }}
                   >
-                    <div style={{ fontSize: 11, fontWeight: 700, color: active ? '#fff' : 'var(--ink-2)' }}>{t.label}</div>
-                    <div style={{ fontSize: 12.5, fontWeight: 600, color: active ? 'rgba(255,255,255,0.85)' : 'var(--muted)', marginTop: 2 }}>{t.sub}</div>
+                    <div style={{ fontSize: 10.5, fontWeight: 700, color: active ? '#fff' : 'var(--ink-2)' }}>{t.label}</div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: active ? 'rgba(255,255,255,0.85)' : 'var(--muted)', marginTop: 2 }}>{t.sub}</div>
                   </button>
                 );
               })}
+              {/* Custom time tile */}
+              {(() => {
+                const active = timeSlot === 'custom';
+                return (
+                  <button
+                    onClick={selectCustom}
+                    style={{
+                      padding: '9px 6px',
+                      background: active ? '#4F46E5' : '#FAFAF9',
+                      border: '1.5px solid ' + (active ? '#4F46E5' : 'var(--line)'),
+                      borderRadius: 9,
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      transition: 'all 140ms ease',
+                      boxShadow: active ? '0 4px 10px -3px rgba(79,70,229,0.45)' : 'none',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
+                    }}
+                  >
+                    <Icon name="clock" size={14} color={active ? '#fff' : 'var(--muted)'} />
+                    <div style={{ fontSize: 10.5, fontWeight: 700, color: active ? '#fff' : 'var(--ink-2)' }}>Custom</div>
+                  </button>
+                );
+              })()}
             </div>
+
+            {/* Custom time expand panel */}
+            {timeSlot === 'custom' && (
+              <div style={{
+                marginTop: 8,
+                padding: '12px 14px',
+                background: 'rgba(79,70,229,0.04)',
+                border: '1.5px solid rgba(79,70,229,0.18)',
+                borderRadius: 10,
+                display: 'flex', alignItems: 'center', gap: 10,
+                animation: 'slideUp 180ms cubic-bezier(.2,.8,.2,1)',
+              }}>
+                <Icon name="clock" size={15} color="#4F46E5" />
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4 }}>Date</div>
+                    <input
+                      type="date"
+                      value={customDate}
+                      onChange={e => setCustomDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      style={{
+                        width: '100%',
+                        height: 34,
+                        padding: '0 10px',
+                        background: '#fff',
+                        border: '1.5px solid rgba(79,70,229,0.25)',
+                        borderRadius: 7,
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: 'var(--ink)',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        accentColor: '#4F46E5',
+                      }}
+                    />
+                  </div>
+                  <div style={{ width: 120 }}>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4 }}>Time</div>
+                    <input
+                      type="time"
+                      value={customTime}
+                      onChange={e => setCustomTime(e.target.value)}
+                      style={{
+                        width: '100%',
+                        height: 34,
+                        padding: '0 10px',
+                        background: '#fff',
+                        border: '1.5px solid rgba(79,70,229,0.25)',
+                        borderRadius: 7,
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: 'var(--ink)',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        accentColor: '#4F46E5',
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Call attempts */}
@@ -501,7 +611,7 @@ function VoxQueueModal({ count, onClose, onConfirm }) {
             <span>
               Vox will call <strong>{count}</strong> debtor{count !== 1 ? 's' : ''}, up to <strong>{tries}×</strong> each,{' '}
               every <strong>{INTERVALS.find(i => i.value === interval)?.label.toLowerCase()}</strong>,{' '}
-              starting at <strong>{TIME_SLOTS.find(t => t.value === timeSlot)?.sub}</strong> — in <strong>{LANGUAGES.find(l => l.value === language)?.label}</strong>.
+              starting <strong>{scheduleLabel()}</strong> — in <strong>{LANGUAGES.find(l => l.value === language)?.label}</strong>.
             </span>
           </div>
 
