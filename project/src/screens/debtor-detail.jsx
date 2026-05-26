@@ -119,6 +119,62 @@ function DebtorDetailScreen({ debtorId, onBack, onOpenThread, onOpenCall, onOpen
           <KV k="Product" v={d.product} />
           <KV k="Originated" v="14 Jan 2026" />
         </Card>
+
+        {/* Client */}
+        {(() => {
+          const orgs = window.CLIENT_ORGS || [];
+          const org = orgs.find(o => o.id === d.clientId);
+          if (!org) return null;
+          return (
+            <Card padding={16}>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 }}>
+                Client
+              </div>
+              {/* Client badge */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, padding: '10px 12px', background: 'var(--surface)', borderRadius: 10, border: '1px solid var(--line)' }}>
+                <div style={{
+                  width: 34, height: 34, borderRadius: 8, flexShrink: 0,
+                  background: org.bg, color: org.fg,
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 700, fontSize: 12,
+                }}>{org.code}</div>
+                <div style={{ lineHeight: 1.25 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600 }}>{org.name}</div>
+                  <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{org.sub}</div>
+                </div>
+              </div>
+              {/* Active product highlight */}
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 8 }}>
+                Active product
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', background: 'var(--brand-soft)', borderRadius: 8, border: '1px solid rgba(225,29,72,0.14)', marginBottom: 12 }}>
+                <Icon name="tag" size={13} color="var(--brand-deep)" />
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--brand-deep)' }}>{d.product}</span>
+              </div>
+              {/* All products this client offers */}
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 8 }}>
+                All products under {org.name}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                {(org.products || []).map((p, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '6px 10px', borderRadius: 7,
+                    background: p === d.product ? 'var(--surface-2)' : 'transparent',
+                    border: '1px solid ' + (p === d.product ? 'var(--line)' : 'transparent'),
+                  }}>
+                    <span style={{
+                      width: 6, height: 6, borderRadius: 3, flexShrink: 0,
+                      background: p === d.product ? 'var(--brand)' : 'var(--muted-2)',
+                    }} />
+                    <span style={{ fontSize: 12.5, color: p === d.product ? 'var(--ink)' : 'var(--ink-3)', fontWeight: p === d.product ? 600 : 400 }}>{p}</span>
+                    {p === d.product && <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 600, color: 'var(--brand)', background: 'var(--brand-soft)', padding: '1px 6px', borderRadius: 999 }}>Active</span>}
+                  </div>
+                ))}
+              </div>
+            </Card>
+          );
+        })()}
       </div>
 
       {/* Right — timeline */}
