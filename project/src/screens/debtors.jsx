@@ -265,30 +265,51 @@ function DebtorsScreen({ onOpenDebtor }) {
   const [product, setProduct]   = useState('all');
   const [channel, setChannel]   = useState('all');
   const [sort, setSort]         = useState('days-desc');
+  const [activeClientId, setActiveClientId] = useState(window.ACTIVE_CLIENT_ID || 'maybank');
 
-  const buckets = [
-    { key: 'current', label: 'Current',   amount: 412800,  count: 184, color: '#15803D', bg: '#ECFDF3', delta: -3.2 },
-    { key: '1-30',    label: '1–30 days', amount: 184320,  count: 92,  color: '#92400E', bg: '#FEF3C7', delta: 8.1 },
-    { key: '31-60',   label: '31–60 days', amount: 94280,  count: 41,  color: '#B45309', bg: '#FFEDD5', delta: 2.4 },
-    { key: '61-90',   label: '61–90 days', amount: 62100,  count: 18,  color: '#C2410C', bg: '#FFE4E6', delta: -1.1 },
-    { key: '90+',     label: '90+ days',   amount: 218400, count: 13,  color: '#9F1239', bg: '#FFE4E6', delta: 12.8 },
-  ];
+  useEffect(() => {
+    window.__setActiveClient = setActiveClientId;
+    return () => { window.__setActiveClient = null; };
+  }, []);
 
-  // Build option lists dynamically from DEBTORS so they show real counts
+  const allDebtors = useMemo(() => {
+    const generated = (window.GENERATED_DEBTORS || []).filter(d => d.clientId === activeClientId);
+    const detailed = (window.DEBTORS || []).filter(d => !d.clientId || d.clientId === activeClientId);
+    return [...detailed, ...generated];
+  }, [activeClientId]);
+
+  const BUCKET_SUMMARY = useMemo(() => {
+    const buckets = { current: 0, '1-30': 0, '31-60': 0, '61-90': 0, '90+': 0 };
+    const amounts = { current: 0, '1-30': 0, '31-60': 0, '61-90': 0, '90+': 0 };
+    allDebtors.forEach(d => {
+      const b = d.bucket || 'current';
+      buckets[b] = (buckets[b] || 0) + 1;
+      amounts[b] = (amounts[b] || 0) + d.balance;
+    });
+    return [
+      { key: 'current', label: 'Current',    amount: Math.round(amounts['current']),  count: buckets['current'],  color: '#15803D', bg: '#ECFDF3', delta: -3.2 },
+      { key: '1-30',    label: '1–30 days',  amount: Math.round(amounts['1-30']),     count: buckets['1-30'],     color: '#92400E', bg: '#FEF3C7', delta: 8.1  },
+      { key: '31-60',   label: '31–60 days', amount: Math.round(amounts['31-60']),    count: buckets['31-60'],    color: '#B45309', bg: '#FFEDD5', delta: 2.4  },
+      { key: '61-90',   label: '61–90 days', amount: Math.round(amounts['61-90']),    count: buckets['61-90'],    color: '#C2410C', bg: '#FFE4E6', delta: -1.1 },
+      { key: '90+',     label: '90+ days',   amount: Math.round(amounts['90+']),      count: buckets['90+'],      color: '#9F1239', bg: '#FFE4E6', delta: 12.8 },
+    ];
+  }, [allDebtors]);
+
+  // Build option lists dynamically from allDebtors so they show real counts
   const assigneeOptions = useMemo(() => {
     const counts = {};
-    DEBTORS.forEach(d => { counts[d.assigned] = (counts[d.assigned] || 0) + 1; });
+    allDebtors.forEach(d => { counts[d.assigned] = (counts[d.assigned] || 0) + 1; });
     return [
       { value: 'all', label: 'All assignees' },
       { value: 'You', label: 'You',     count: counts['You'] || 0 },
       { value: 'Vox AI', label: 'Vox AI', count: counts['Vox AI'] || 0, dot: 'var(--vox)' },
       { value: 'Hassan T.', label: 'Hassan T.', count: counts['Hassan T.'] || 0 },
     ];
-  }, []);
+  }, [allDebtors]);
 
   const marketOptions = useMemo(() => {
     const counts = {};
-    DEBTORS.forEach(d => { counts[d.country] = (counts[d.country] || 0) + 1; });
+    allDebtors.forEach(d => { counts[d.country] = (counts[d.country] || 0) + 1; });
     return [
       { value: 'SG', label: 'Singapore',   flag: 'SG', count: counts.SG || 0 },
       { value: 'MY', label: 'Malaysia',    flag: 'MY', count: counts.MY || 0 },
@@ -297,16 +318,16 @@ function DebtorsScreen({ onOpenDebtor }) {
       { value: 'TH', label: 'Thailand',    flag: 'TH', count: counts.TH || 0 },
       { value: 'VN', label: 'Vietnam',     flag: 'VN', count: counts.VN || 0 },
     ];
-  }, []);
+  }, [allDebtors]);
 
   const productOptions = useMemo(() => {
     const counts = {};
-    DEBTORS.forEach(d => { counts[d.product] = (counts[d.product] || 0) + 1; });
+    allDebtors.forEach(d => { counts[d.product] = (counts[d.product] || 0) + 1; });
     return [
       { value: 'all', label: 'All products' },
       ...Object.keys(counts).sort().map(p => ({ value: p, label: p, count: counts[p] })),
     ];
-  }, []);
+  }, [allDebtors]);
 
   const channelOptions = [
     { value: 'all',      label: 'All channels' },
@@ -331,7 +352,7 @@ function DebtorsScreen({ onOpenDebtor }) {
   const SGD_RATES = { SGD: 1, MYR: 0.32, IDR: 0.000085, PHP: 0.024, THB: 0.039, VND: 0.000054 };
 
   const filtered = useMemo(() => {
-    let out = DEBTORS.filter(d => {
+    let out = allDebtors.filter(d => {
       if (bucket !== 'all'   && d.bucket !== bucket) return false;
       if (assigned !== 'all' && d.assigned !== assigned) return false;
       if (markets.length > 0 && !markets.includes(d.country)) return false;
@@ -374,7 +395,7 @@ function DebtorsScreen({ onOpenDebtor }) {
       }
     }
     return out;
-  }, [bucket, assigned, markets, product, channel, query, sort]);
+  }, [allDebtors, bucket, assigned, markets, product, channel, query, sort]);
 
   // SGD-equivalent total of filtered balances (for header)
   const filteredTotalSGD = useMemo(() => {
@@ -411,12 +432,12 @@ function DebtorsScreen({ onOpenDebtor }) {
       <div style={{ display: 'flex', gap: 12 }}>
         <BucketCard
           label="All open"
-          amount={971900} count={348}
+          amount={allDebtors.reduce((s, d) => s + d.balance, 0)} count={allDebtors.length}
           color="#0B0B0F" bg="#F1F1EE"
           active={bucket === 'all'}
           onClick={() => setBucket('all')}
         />
-        {buckets.map(b => (
+        {BUCKET_SUMMARY.map(b => (
           <BucketCard key={b.key} {...b} active={bucket === b.key} onClick={() => setBucket(b.key)} />
         ))}
       </div>
@@ -525,7 +546,7 @@ function DebtorsScreen({ onOpenDebtor }) {
           display: 'flex', alignItems: 'center',
         }}>
           <span>
-            <span className="tnum" style={{ color: 'var(--ink-2)', fontWeight: 500 }}>{filtered.length}</span> of <span className="tnum">348</span> accounts
+            <span className="tnum" style={{ color: 'var(--ink-2)', fontWeight: 500 }}>{filtered.length}</span> of <span className="tnum">{allDebtors.length}</span> accounts
             {activeFilterCount > 0 && (
               <span style={{ marginLeft: 8 }}>
                 · <span className="tnum" style={{ color: 'var(--ink-2)', fontWeight: 500 }}>RM {filteredTotalSGD.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span> MYR-equiv balance

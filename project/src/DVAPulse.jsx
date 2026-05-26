@@ -2,6 +2,7 @@
 
 // Boot order: setup (React globals) → data → ui primitives → screens → app
 import './setup.js';
+import './generated-debtors.jsx';
 import './icons.jsx';
 import './data.jsx';
 import './casework-data.jsx';

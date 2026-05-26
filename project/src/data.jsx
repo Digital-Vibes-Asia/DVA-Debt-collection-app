@@ -53,6 +53,7 @@ function avatarColor(name) {
 const DEBTORS = [
   {
     id: 'D-2841',
+    clientId: 'maybank',
     name: 'Aishah binti Rahman',
     company: 'Saraswati Boutique',
     city: 'Kuala Lumpur',
@@ -79,6 +80,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2839',
+    clientId: 'maybank',
     name: 'Ahmad Firdaus bin Ismail',
     company: 'Firdaus Enterprise',
     city: 'Petaling Jaya',
@@ -103,6 +105,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2782',
+    clientId: 'maybank',
     name: 'Kavitha a/p Rajendran',
     company: '—',
     city: 'Subang Jaya',
@@ -127,6 +130,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2901',
+    clientId: 'maybank',
     name: 'Mohd Ridzuan bin Zainal',
     company: 'Kedai Ridzuan',
     city: 'Klang',
@@ -153,6 +157,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2654',
+    clientId: 'maybank',
     name: 'Siti Norzahira binti Hamid',
     company: 'Norzahira Fashion',
     city: 'Shah Alam',
@@ -177,6 +182,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2933',
+    clientId: 'maybank',
     name: 'Tan Wei Ming',
     company: '—',
     city: 'Kuala Lumpur',
@@ -201,6 +207,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2778',
+    clientId: 'maybank',
     name: 'Chong Wei Lim',
     company: 'CWL Logistics Sdn Bhd',
     city: 'Seremban',
@@ -227,6 +234,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2810',
+    clientId: 'maybank',
     name: 'Lim Hui Min',
     company: '—',
     city: 'Penang',
@@ -251,6 +259,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2871',
+    clientId: 'maybank',
     name: 'Nurul Aini binti Osman',
     company: 'Kedai Aini',
     city: 'Kota Bharu',
@@ -275,6 +284,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2602',
+    clientId: 'maybank',
     name: 'Wong Chee Kiong',
     company: 'WCK Hardware',
     city: 'Ipoh',
@@ -299,6 +309,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2950',
+    clientId: 'maybank',
     name: 'Sarah binti Ismail',
     company: 'Bloom Café',
     city: 'Johor Bahru',
@@ -323,6 +334,7 @@ const DEBTORS = [
   },
   {
     id: 'D-2495',
+    clientId: 'maybank',
     name: 'Datin Rohaiza binti Azman',
     company: 'Rohaiza Coffee & Tea',
     city: 'Melaka',

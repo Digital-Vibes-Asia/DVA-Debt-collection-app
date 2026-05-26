@@ -71,7 +71,7 @@ const NAV_GROUPS = [
 function Sidebar({ current, onNav }) {
   const [orgOpen, setOrgOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
-  const [org, setOrg] = useState({ id: 'nb', code: 'NB', name: 'Nusantara Bank', sub: 'Retail Collections · MY/SG' });
+  const [org, setOrg] = useState({ id: 'maybank', code: 'MB', name: 'Maybank', sub: 'Cards & loans · MY' });
 
   return (
     <aside style={{
@@ -104,12 +104,17 @@ function Sidebar({ current, onNav }) {
           textAlign: 'left',
           cursor: 'pointer',
         }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: 7,
-            background: 'linear-gradient(135deg, #FFE4E6, #FECDD3)',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--brand-deep)', fontWeight: 700, fontSize: 12,
-          }}>{org.code}</div>
+          {(() => {
+            const orgData = (window.CLIENT_ORGS || []).find(o => o.id === org.id) || {};
+            return (
+              <div style={{
+                width: 28, height: 28, borderRadius: 7,
+                background: orgData.bg || 'linear-gradient(135deg, #FEF3C7, #FCD34D)',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                color: orgData.fg || '#92400E', fontWeight: 700, fontSize: 12,
+              }}>{org.code}</div>
+            );
+          })()}
           <div style={{ flex: 1, lineHeight: 1.2 }}>
             <div style={{ fontSize: 12.5, fontWeight: 600 }}>{org.name}</div>
             <div style={{ fontSize: 10.5, color: 'var(--muted)' }}>{org.sub}</div>
@@ -126,13 +131,8 @@ function Sidebar({ current, onNav }) {
               boxShadow: 'var(--shadow-lg)',
               zIndex: 21,
             }}>
-              {[
-                { id: 'nb',  code: 'NB',  name: 'Nusantara Bank',   sub: 'Retail Collections · MY/SG',  bg: 'linear-gradient(135deg, #FFE4E6, #FECDD3)', fg: 'var(--brand-deep)' },
-                { id: 'mbg', code: 'MB',  name: 'Maybank Group',    sub: 'Cards & loans · MY',          bg: 'linear-gradient(135deg, #FEF3C7, #FCD34D)', fg: '#92400E' },
-                { id: 'gxs', code: 'GX',  name: 'GXS Bank',         sub: 'Digital lending · SG',        bg: 'linear-gradient(135deg, #E0E7FF, #C7D2FE)', fg: '#3730A3' },
-                { id: 'home',code: 'HC',  name: 'HomeCredit ID',    sub: 'Consumer finance · ID',       bg: 'linear-gradient(135deg, #DCFCE7, #BBF7D0)', fg: '#166534' },
-              ].map(o => (
-                <button key={o.id} onClick={() => { setOrg(o); setOrgOpen(false); window.toast({ title: `Switched to ${o.name}`, description: o.sub, icon: 'building' }); }} style={{
+              {(window.CLIENT_ORGS || []).map(o => (
+                <button key={o.id} onClick={() => { setOrg(o); setOrgOpen(false); window.ACTIVE_CLIENT_ID = o.id; window.__setActiveClient && window.__setActiveClient(o.id); window.toast({ title: `Switched to ${o.name}`, description: o.sub, icon: 'building' }); }} style={{
                   width: '100%', textAlign: 'left',
                   padding: '8px 8px',
                   background: org.id === o.id ? 'var(--surface-2)' : 'transparent',
