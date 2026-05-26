@@ -721,8 +721,6 @@ function LoginFlow() {
               key={'pw-' + role}
             />
 
-            <SecurityStep role={role} verifying={step === 'verifying'} />
-
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: dark ? 'rgba(255,255,255,0.7)' : '#3F3F46', cursor: 'pointer' }}>
                 <span style={{
@@ -764,25 +762,6 @@ function LoginFlow() {
               )}
             </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: dark ? 'rgba(255,255,255,0.4)' : '#A1A1AA', fontSize: 11, margin: '0' }}>
-              <div style={{ flex: 1, height: 1, background: dark ? 'rgba(255,255,255,0.08)' : '#EFEDE8' }} />
-              <span style={{ letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600 }}>or</span>
-              <div style={{ flex: 1, height: 1, background: dark ? 'rgba(255,255,255,0.08)' : '#EFEDE8' }} />
-            </div>
-
-            <button type="button" style={{
-              height: 44, padding: '0 18px',
-              background: dark ? 'transparent' : '#fff',
-              color: dark ? '#FBFAF7' : '#0B0B0F',
-              border: '1px solid ' + (dark ? 'rgba(255,255,255,0.16)' : '#E7E5E0'),
-              borderRadius: 10,
-              fontSize: 13.5, fontWeight: 500,
-              cursor: 'pointer',
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            }}>
-              <Icon name="building" size={16} />
-              Continue with company SSO
-            </button>
           </form>
 
           <div style={{
