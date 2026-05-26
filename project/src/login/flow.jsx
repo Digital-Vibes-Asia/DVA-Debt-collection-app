@@ -1,6 +1,7 @@
-// Unified login flow — one seamless screen for client demo.
-// Role selector morphs the right-pane preview, the security step,
-// and the background tint. Sign in → verifying → welcome.
+// Login flow — each role has its own dedicated page.
+// Role is read from the URL path (/login/sales-manager, etc.)
+// Clicking a role chip navigates to that role's page.
+// Sign in → verifying → welcome.
 
 const { useState: useS, useEffect: useE, useRef: useR } = React;
 
@@ -348,9 +349,9 @@ const PREVIEWS = {
   'head-of-sales': HeadOfSalesPreview,
 };
 
-// ─── Role selector (segmented control) ─────────────────────────
+// ─── Role selector — each chip is a page link ──────────────────
 
-function RoleSelector({ value, onChange }) {
+function RoleSelector({ value }) {
   const order = ['sales-manager', 'senior-manager', 'head-of-sales'];
   return (
     <div style={{
@@ -364,10 +365,9 @@ function RoleSelector({ value, onChange }) {
         const r = ROLE_CONFIG[k];
         const active = value === k;
         return (
-          <button
+          <a
             key={k}
-            type="button"
-            onClick={() => onChange(k)}
+            href={'/login/' + k}
             style={{
               padding: '10px 10px',
               background: active ? '#fff' : 'transparent',
@@ -375,7 +375,7 @@ function RoleSelector({ value, onChange }) {
               borderRadius: 9,
               display: 'flex', alignItems: 'center', gap: 10,
               cursor: 'pointer',
-              textAlign: 'left',
+              textDecoration: 'none',
               boxShadow: active ? '0 1px 2px rgba(11,11,15,0.04)' : 'none',
               transition: 'all 160ms ease',
             }}
@@ -398,7 +398,7 @@ function RoleSelector({ value, onChange }) {
                 {r.sub}
               </div>
             </div>
-          </button>
+          </a>
         );
       })}
     </div>
@@ -565,16 +565,23 @@ function WelcomeOverlay({ role, onEnter, onCancel }) {
 
 // ─── Main flow ─────────────────────────────────────────────────
 
+function getRoleFromURL() {
+  if (typeof window === 'undefined') return 'sales-manager';
+  const match = window.location.pathname.match(/\/login\/([^/]+)/);
+  if (match && ROLE_CONFIG[match[1]]) return match[1];
+  return 'sales-manager';
+}
+
 function LoginFlow() {
-  const [role, setRole] = useS('sales-manager');
+  const role = getRoleFromURL();
   const [step, setStep] = useS('signin');     // signin | verifying | welcome
   const [email, setEmail] = useS('');
   const [pwd, setPwd] = useS('');
   const r = ROLE_CONFIG[role];
   const dark = !!r.dark;
 
-  // Sync default email when role changes
-  useE(() => { setEmail(r.user.email); setPwd('demo-password-2026'); /* eslint-disable-next-line */ }, [role]);
+  // Sync default email on mount
+  useE(() => { setEmail(r.user.email); setPwd('demo-password-2026'); }, []);
 
   const Preview = PREVIEWS[role];
 
@@ -681,7 +688,7 @@ function LoginFlow() {
               color: dark ? 'rgba(255,255,255,0.55)' : '#A1A1AA',
               marginBottom: 8,
             }}>I'm signing in as</div>
-            <RoleSelector value={role} onChange={setRole} />
+            <RoleSelector value={role} />
           </div>
 
           <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
