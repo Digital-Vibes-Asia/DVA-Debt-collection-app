@@ -297,7 +297,7 @@ function InboxScreen({ onOpenDebtor }) {
       {/* Conversation */}
       <div style={{
         display: 'flex', flexDirection: 'column',
-        background: '#FBF9F4',
+        background: 'var(--surface-2)',
         backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(220,248,198,0.18) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(225,29,72,0.04) 0%, transparent 50%)',
       }}>
         {/* Thread header */}

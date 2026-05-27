@@ -48,7 +48,7 @@ function PhoneFrame({ title, children }) {
         <div style={{
           width: '100%', height: '100%',
           borderRadius: 34,
-          background: '#FBF9F4',
+          background: 'var(--surface-2)',
           overflow: 'hidden',
           position: 'relative',
         }}>
@@ -283,7 +283,7 @@ function MobCallBtn({ icon, l, tone }) {
 function MobileWhatsApp() {
   const thread = THREADS[0];
   return (
-    <div style={{ height: 'calc(100% - 36px)', background: '#FBF9F4', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ height: 'calc(100% - 36px)', background: 'var(--surface-2)', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '6px 14px 10px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid var(--line)', background: 'var(--card)' }}>
         <Icon name="chevLeft" size={20} color="var(--brand)" />
         <Avatar name={thread.name} size={32} />

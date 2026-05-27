@@ -115,6 +115,37 @@ html.dark [style*="background: white"] { background: var(--card) !important; }
 
 /* Force sidebar, cards, filter bars, tables to use dark surfaces */
 html.dark aside { background: var(--surface-2) !important; border-color: var(--line) !important; }
+
+/* ── Active bucket cards: override all pastel bg props ─────────────── */
+html.dark .bucket-card-active {
+  background: rgba(255,255,255,0.07) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+}
+
+/* ── Remaining hardcoded light surfaces ───────────────────────────── */
+/* WhatsApp bubble bg (intentionally kept light to simulate WA UI) */
+html.dark .wa-bubble-bg { background: #1A3A2A !important; }
+
+/* Inbox / mobile pane cream background */
+html.dark [style*="background: #FBF9F4"],
+html.dark [style*="background: rgb(251, 249, 244)"] {
+  background: var(--surface-2) !important;
+}
+
+/* Light green WA badge/chip (#E8FFF1) */
+html.dark [style*="background: #E8FFF1"],
+html.dark [style*="background: rgb(232, 255, 241)"] {
+  background: rgba(37,211,102,0.12) !important;
+}
+
+/* Vox queue modal WhatsApp preview */
+html.dark [style*="background: #ECF5E9"],
+html.dark [style*="background: rgb(236, 245, 233)"] {
+  background: #12261A !important;
+}
+
+/* Avatar initials default bg */
+html.dark .avatar-default { background: #3F3F46 !important; color: var(--ink-2) !important; }
 html.dark main  { background: var(--surface) !important; }
 
 * { box-sizing: border-box; }

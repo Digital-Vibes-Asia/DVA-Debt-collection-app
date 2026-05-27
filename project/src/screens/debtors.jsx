@@ -4,6 +4,7 @@ function BucketCard({ label, amount, count, color, bg, active, onClick, delta })
   return (
     <button
       onClick={onClick}
+      className={active ? 'bucket-card-active' : ''}
       style={{
         flex: 1,
         minWidth: 0,
