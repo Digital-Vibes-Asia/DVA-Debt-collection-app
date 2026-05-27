@@ -268,31 +268,45 @@ function productMeta(product = '') {
 }
 
 // ─── Plan Builder ──────────────────────────────────────────────────
-function PlanBuilder({ plan, onClearPlan }) {
-  const [n, setN]             = useState(plan ? plan.instalments : 3);
-  const [clientId, setClientId] = useState('maybank');
+function PlanBuilder({ plan, allPlans, onClearPlan }) {
+  const [n, setN]               = useState(plan ? plan.instalments : 3);
+  const [clientId, setClientId] = useState(plan?.clientId || 'maybank');
   const [clientOpen, setClientOpen] = useState(false);
-  const [waOpen, setWaOpen]   = useState(false);
+  const [waOpen, setWaOpen]     = useState(false);
+  const [activeId, setActiveId] = useState(plan?.id || null);
   const clientRef = useRef(null);
 
-  // Sync slider + client when a plan row is selected
+  // When a new plan row is selected from the table, reset active account
   useEffect(() => {
     if (plan) {
+      setActiveId(plan.id);
       setN(plan.instalments);
       if (plan.clientId) setClientId(plan.clientId);
     }
-  }, [plan]);
+  }, [plan?.id]);
+
+  // When user switches account within the same debtor, sync client + n
+  useEffect(() => {
+    if (!activeId || !allPlans) return;
+    const ap = allPlans.find(p => p.id === activeId);
+    if (ap) {
+      setN(ap.instalments);
+      if (ap.clientId) setClientId(ap.clientId);
+    }
+  }, [activeId]);
 
   const clients = window.CLIENT_ORGS || [
     { id: 'maybank', code: 'MB', name: 'Maybank', sub: 'Cards & loans · MY', bg: 'linear-gradient(135deg,#FEF3C7,#FCD34D)', fg: '#92400E' },
   ];
   const activeClient = clients.find(c => c.id === clientId) || clients[0];
 
-  const total = plan ? plan.total : 6780;
+  const defaultPlan = { id: 'P-9762', debtor: 'Lim Hui Min', total: 6780, instalments: 3, state: 'new', next: '26 May', product: null, clientId: 'cimb' };
+  const siblings    = plan && allPlans ? allPlans.filter(p => p.debtor === plan.debtor) : [];
+  const activePlan  = (allPlans && activeId ? allPlans.find(p => p.id === activeId) : null) || plan || defaultPlan;
+
+  const total = activePlan.total;
   const each  = Math.round(total / n);
   const sliderPct = ((n - 1) / 11) * 100;
-
-  const activePlan = plan || { id: 'P-9762', debtor: 'Lim Hui Min', total: 6780, instalments: 3, state: 'new', next: '26 May' };
 
   useEffect(() => {
     if (!clientOpen) return;
@@ -382,7 +396,7 @@ function PlanBuilder({ plan, onClearPlan }) {
           <div>
             <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500, marginBottom: 6 }}>Product</div>
             {(() => {
-              const prod = plan ? plan.product : null;
+              const prod = activePlan.product || null;
               const meta = prod ? productMeta(prod) : null;
               return (
                 <div style={{
@@ -442,6 +456,52 @@ function PlanBuilder({ plan, onClearPlan }) {
               {plan && <Badge tone={plan.state === 'broken' ? 'danger' : plan.state === 'new' ? 'brand' : 'success'} size="sm">{plan.state}</Badge>}
             </div>
           </div>
+
+          {/* Account switcher — shown when debtor has multiple loans */}
+          {siblings.length > 1 && (
+            <div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Icon name="receipt" size={12} color="var(--brand)" />
+                <span>{siblings.length} loans on file — select account to plan</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                {siblings.map(s => {
+                  const meta = productMeta(s.product);
+                  const isAct = s.id === activeId;
+                  return (
+                    <button key={s.id} onClick={() => setActiveId(s.id)} style={{
+                      display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px',
+                      background: isAct ? meta.soft : 'var(--surface-2)',
+                      border: '1.5px solid ' + (isAct ? meta.color + '66' : 'var(--line)'),
+                      borderRadius: 8, cursor: 'pointer', textAlign: 'left',
+                      transition: 'all 130ms ease',
+                    }}
+                    onMouseEnter={e => { if (!isAct) e.currentTarget.style.background = 'var(--surface)'; }}
+                    onMouseLeave={e => { if (!isAct) e.currentTarget.style.background = 'var(--surface-2)'; }}
+                    >
+                      <div style={{
+                        width: 28, height: 28, borderRadius: 7, flexShrink: 0,
+                        background: isAct ? meta.color : 'var(--line)',
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <Icon name={meta.icon} size={13} color="#fff" />
+                      </div>
+                      <div style={{ flex: 1, lineHeight: 1.2 }}>
+                        <div style={{ fontSize: 12.5, fontWeight: 600, color: isAct ? meta.color : 'var(--ink-2)' }}>{s.product}</div>
+                        <div style={{ fontSize: 10.5, color: 'var(--muted)' }} className="tnum">
+                          {s.id} · RM {s.total.toLocaleString()} outstanding
+                        </div>
+                      </div>
+                      <div style={{ fontSize: 10.5, color: isAct ? meta.color : 'var(--muted)', fontWeight: 500 }} className="tnum">
+                        RM {Math.round(s.total / s.instalments).toLocaleString()}/mo
+                      </div>
+                      {isAct && <Icon name="check" size={13} color={meta.color} strokeWidth={2.5} />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <Field label="Outstanding" value={fmtMoney(total, 'MYR')} mono large />
@@ -535,6 +595,8 @@ function PlansScreen({ onOpenDebtor }) {
     { id: 'P-9818', debtor: 'Chong Wei Lim',             ccy: 'MYR', total: 28400,  instalments: 3, next: '15 May', state: 'on-track',  progress: 33, agent: 'You',        clientId: 'maybank', product: 'Housing Loan' },
     { id: 'P-9810', debtor: 'Mohd Ridzuan bin Zainal',   ccy: 'MYR', total: 8450,   instalments: 2, next: '20 May', state: 'on-track',  progress: 50, agent: 'Hassan T.',  clientId: 'rhb',     product: 'Personal Loan' },
     { id: 'P-9802', debtor: 'Ahmad Firdaus bin Ismail',  ccy: 'MYR', total: 15800,  instalments: 4, next: 'Today',  state: 'due-today', progress: 25, agent: 'You',        clientId: 'maybank', product: 'Credit Card' },
+    { id: 'P-9803', debtor: 'Ahmad Firdaus bin Ismail',  ccy: 'MYR', total: 342000, instalments: 12, next: '26 May', state: 'active',   progress: 8,  agent: 'You',        clientId: 'maybank', product: 'Housing Loan' },
+    { id: 'P-9804', debtor: 'Ahmad Firdaus bin Ismail',  ccy: 'MYR', total: 8200,   instalments: 3, next: '26 May', state: 'on-track',  progress: 33, agent: 'Hassan T.',  clientId: 'maybank', product: 'Personal Financing-i' },
     { id: 'P-9786', debtor: 'Tan Wei Ming',              ccy: 'MYR', total: 1250,   instalments: 3, next: '26 May', state: 'on-track',  progress: 33, agent: 'Vox AI',     clientId: 'cimb',    product: 'CIMB Credit Card' },
     { id: 'P-9762', debtor: 'Lim Hui Min',               ccy: 'MYR', total: 6780,   instalments: 3, next: '26 May', state: 'new',       progress: 0,  agent: 'Vox AI',     clientId: 'cimb',    product: 'Personal Financing' },
     { id: 'P-9701', debtor: 'Wong Chee Kiong',           ccy: 'MYR', total: 88300,  instalments: 6, next: '12 May', state: 'broken',    progress: 16, agent: 'Hassan T.',  clientId: 'rhb',     product: 'Mortgage' },
@@ -575,6 +637,7 @@ function PlansScreen({ onOpenDebtor }) {
             <tbody>
               {plans.map((p, i) => {
                 const sel = selectedPlan?.id === p.id;
+                const accountCount = plans.filter(x => x.debtor === p.debtor).length;
                 return (
                   <tr key={p.id}
                     onClick={() => setSelectedPlan(sel ? null : p)}
@@ -596,7 +659,14 @@ function PlansScreen({ onOpenDebtor }) {
                     <Td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <Avatar name={p.debtor} size={26} />
-                        <span style={{ fontWeight: sel ? 700 : 500 }}>{p.debtor}</span>
+                        <div style={{ lineHeight: 1.25 }}>
+                          <div style={{ fontWeight: sel ? 700 : 500 }}>{p.debtor}</div>
+                          {accountCount > 1 && (
+                            <div style={{ fontSize: 10.5, color: 'var(--brand)', fontWeight: 600 }}>
+                              {accountCount} accounts · {p.product}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </Td>
                     <Td align="right"><span className="tnum" style={{ fontWeight: 600 }}>{fmtMoney(p.total, p.ccy)}</span></Td>
@@ -635,7 +705,7 @@ function PlansScreen({ onOpenDebtor }) {
       </div>
 
       {/* Right — plan builder */}
-      <PlanBuilder plan={selectedPlan} onClearPlan={() => setSelectedPlan(null)} />
+      <PlanBuilder plan={selectedPlan} allPlans={plans} onClearPlan={() => setSelectedPlan(null)} />
     </div>
   );
 }
