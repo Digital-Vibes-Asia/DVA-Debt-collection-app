@@ -17,7 +17,7 @@ function PlansScreen({ onOpenDebtor }) {
         {/* Summary tiles */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
           <KpiTile label="Active plans" value="47" delta={12.4} />
-          <KpiTile label="Promised this month" value="284,500" prefix="S$" delta={8.1} />
+          <KpiTile label="Promised this month" value="284,500" prefix="RM" delta={8.1} />
           <KpiTile label="Plans kept" value="81" suffix="%" delta={3.6} accent="var(--success)" />
           <KpiTile label="Plans broken" value="9" delta={-2.4} accent="var(--danger)" />
         </div>
