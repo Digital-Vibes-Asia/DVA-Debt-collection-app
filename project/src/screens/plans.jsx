@@ -245,6 +245,28 @@ DVA Collections`,
   );
 }
 
+// ─── Product icon + colour helper ─────────────────────────────────
+function productMeta(product = '') {
+  const p = product.toLowerCase();
+  if (p.includes('credit card') || p.includes('cimb card') || p.includes('rhb card'))
+    return { icon: 'card',     label: 'Credit Card',        color: '#6366F1', soft: 'rgba(99,102,241,0.1)' };
+  if (p.includes('housing') || p.includes('home') || p.includes('mortgage'))
+    return { icon: 'building', label: 'Home Financing',     color: '#0284C7', soft: 'rgba(2,132,199,0.1)' };
+  if (p.includes('personal'))
+    return { icon: 'document', label: 'Personal Financing', color: '#059669', soft: 'rgba(5,150,105,0.1)' };
+  if (p.includes('asb'))
+    return { icon: 'cash',     label: 'ASB Financing',      color: '#D97706', soft: 'rgba(217,119,6,0.1)' };
+  if (p.includes('auto') || p.includes('car'))
+    return { icon: 'cash',     label: 'Auto Finance',       color: '#DC2626', soft: 'rgba(220,38,38,0.1)' };
+  if (p.includes('postpaid') || p.includes('device') || p.includes('broadband') || p.includes('fibre'))
+    return { icon: 'mobile',   label: 'Telco / Device',     color: '#7C3AED', soft: 'rgba(124,58,237,0.1)' };
+  if (p.includes('rental') || p.includes('purifier') || p.includes('mattress'))
+    return { icon: 'refresh',  label: 'Rental Product',     color: '#0891B2', soft: 'rgba(8,145,178,0.1)' };
+  if (p.includes('sme') || p.includes('business') || p.includes('term loan') || p.includes('working capital'))
+    return { icon: 'building', label: 'Business Loan',      color: '#B45309', soft: 'rgba(180,83,9,0.1)' };
+  return   { icon: 'receipt',  label: 'Loan / Financing',   color: 'var(--muted)', soft: 'var(--surface-2)' };
+}
+
 // ─── Plan Builder ──────────────────────────────────────────────────
 function PlanBuilder({ plan, onClearPlan }) {
   const [n, setN]             = useState(plan ? plan.instalments : 3);
@@ -253,8 +275,13 @@ function PlanBuilder({ plan, onClearPlan }) {
   const [waOpen, setWaOpen]   = useState(false);
   const clientRef = useRef(null);
 
-  // Sync slider when a plan row is selected
-  useEffect(() => { if (plan) setN(plan.instalments); }, [plan]);
+  // Sync slider + client when a plan row is selected
+  useEffect(() => {
+    if (plan) {
+      setN(plan.instalments);
+      if (plan.clientId) setClientId(plan.clientId);
+    }
+  }, [plan]);
 
   const clients = window.CLIENT_ORGS || [
     { id: 'maybank', code: 'MB', name: 'Maybank', sub: 'Cards & loans · MY', bg: 'linear-gradient(135deg,#FEF3C7,#FCD34D)', fg: '#92400E' },
@@ -349,6 +376,48 @@ function PlanBuilder({ plan, onClearPlan }) {
                 })}
               </div>
             )}
+          </div>
+
+          {/* Product */}
+          <div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500, marginBottom: 6 }}>Product</div>
+            {(() => {
+              const prod = plan ? plan.product : null;
+              const meta = prod ? productMeta(prod) : null;
+              return (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 10, padding: '9px 11px',
+                  background: meta ? meta.soft : 'var(--surface-2)',
+                  border: '1px solid ' + (meta ? meta.color + '33' : 'var(--line)'),
+                  borderRadius: 8, transition: 'all 200ms ease',
+                }}>
+                  <div style={{
+                    width: 30, height: 30, borderRadius: 7, flexShrink: 0,
+                    background: meta ? meta.color : 'var(--line)',
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <Icon name={meta ? meta.icon : 'receipt'} size={15} color="#fff" />
+                  </div>
+                  <div style={{ flex: 1, lineHeight: 1.25 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: meta ? meta.color : 'var(--muted)' }}>
+                      {prod || '—'}
+                    </div>
+                    <div style={{ fontSize: 10.5, color: 'var(--muted)' }}>
+                      {meta ? meta.label : 'Select a debtor to see product'}
+                    </div>
+                  </div>
+                  {prod && (
+                    <div style={{
+                      fontSize: 10, fontWeight: 600, padding: '2px 7px',
+                      background: meta.color + '22', color: meta.color,
+                      borderRadius: 999, letterSpacing: '0.04em',
+                    }}>
+                      {meta.label.toUpperCase().split(' ')[0]}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
           {/* Debtor — selected from table or default */}
@@ -462,13 +531,13 @@ function PlansScreen({ onOpenDebtor }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
 
   const plans = [
-    { id: 'P-9821', debtor: 'Aishah binti Rahman',       ccy: 'MYR', total: 12450,  instalments: 2, next: '22 May', state: 'active',    progress: 0,  agent: 'You' },
-    { id: 'P-9818', debtor: 'Chong Wei Lim',             ccy: 'MYR', total: 28400,  instalments: 3, next: '15 May', state: 'on-track',  progress: 33, agent: 'You' },
-    { id: 'P-9810', debtor: 'Mohd Ridzuan bin Zainal',   ccy: 'MYR', total: 8450,   instalments: 2, next: '20 May', state: 'on-track',  progress: 50, agent: 'Hassan T.' },
-    { id: 'P-9802', debtor: 'Ahmad Firdaus bin Ismail',  ccy: 'MYR', total: 15800,  instalments: 4, next: 'Today',  state: 'due-today', progress: 25, agent: 'You' },
-    { id: 'P-9786', debtor: 'Tan Wei Ming',              ccy: 'MYR', total: 1250,   instalments: 3, next: '26 May', state: 'on-track',  progress: 33, agent: 'Vox AI' },
-    { id: 'P-9762', debtor: 'Lim Hui Min',               ccy: 'MYR', total: 6780,   instalments: 3, next: '26 May', state: 'new',       progress: 0,  agent: 'Vox AI' },
-    { id: 'P-9701', debtor: 'Wong Chee Kiong',           ccy: 'MYR', total: 88300,  instalments: 6, next: '12 May', state: 'broken',    progress: 16, agent: 'Hassan T.' },
+    { id: 'P-9821', debtor: 'Aishah binti Rahman',       ccy: 'MYR', total: 12450,  instalments: 2, next: '22 May', state: 'active',    progress: 0,  agent: 'You',        clientId: 'maybank', product: 'Personal Financing-i' },
+    { id: 'P-9818', debtor: 'Chong Wei Lim',             ccy: 'MYR', total: 28400,  instalments: 3, next: '15 May', state: 'on-track',  progress: 33, agent: 'You',        clientId: 'maybank', product: 'Housing Loan' },
+    { id: 'P-9810', debtor: 'Mohd Ridzuan bin Zainal',   ccy: 'MYR', total: 8450,   instalments: 2, next: '20 May', state: 'on-track',  progress: 50, agent: 'Hassan T.',  clientId: 'rhb',     product: 'Personal Loan' },
+    { id: 'P-9802', debtor: 'Ahmad Firdaus bin Ismail',  ccy: 'MYR', total: 15800,  instalments: 4, next: 'Today',  state: 'due-today', progress: 25, agent: 'You',        clientId: 'maybank', product: 'Credit Card' },
+    { id: 'P-9786', debtor: 'Tan Wei Ming',              ccy: 'MYR', total: 1250,   instalments: 3, next: '26 May', state: 'on-track',  progress: 33, agent: 'Vox AI',     clientId: 'cimb',    product: 'CIMB Credit Card' },
+    { id: 'P-9762', debtor: 'Lim Hui Min',               ccy: 'MYR', total: 6780,   instalments: 3, next: '26 May', state: 'new',       progress: 0,  agent: 'Vox AI',     clientId: 'cimb',    product: 'Personal Financing' },
+    { id: 'P-9701', debtor: 'Wong Chee Kiong',           ccy: 'MYR', total: 88300,  instalments: 6, next: '12 May', state: 'broken',    progress: 16, agent: 'Hassan T.',  clientId: 'rhb',     product: 'Mortgage' },
   ];
 
   return (
