@@ -248,21 +248,38 @@ DVA Collections`,
 // ─── Product icon + colour helper ─────────────────────────────────
 function productMeta(product = '') {
   const p = product.toLowerCase();
+  // Credit cards
   if (p.includes('credit card') || p.includes('cimb card') || p.includes('rhb card'))
     return { icon: 'card',     label: 'Credit Card',        color: '#6366F1', soft: 'rgba(99,102,241,0.1)' };
-  if (p.includes('housing') || p.includes('home') || p.includes('mortgage'))
-    return { icon: 'building', label: 'Home Financing',     color: '#0284C7', soft: 'rgba(2,132,199,0.1)' };
-  if (p.includes('personal'))
+  // Home / housing loans
+  if (p.includes('housing') || p.includes('home financing') || p.includes('mortgage') || p.includes('home fibre') || p.includes('home 5g') || p.includes('maxisone home') || p.includes('u home'))
+    return { icon: 'globe',    label: 'Home / Broadband',   color: '#0284C7', soft: 'rgba(2,132,199,0.1)' };
+  // Coway water purifiers
+  if (p.includes('purifier') || p.includes('villaem') || p.includes('dazzie') || p.includes('neo plus') || p.includes('ais ice') || p.includes('cinnamon'))
+    return { icon: 'refresh',  label: 'Water Purifier',     color: '#0891B2', soft: 'rgba(8,145,178,0.1)' };
+  // Coway air purifiers
+  if (p.includes('air purifier'))
+    return { icon: 'refresh',  label: 'Air Purifier',       color: '#06B6D4', soft: 'rgba(6,182,212,0.1)' };
+  // Coway rental products
+  if (p.includes('mattress') || p.includes('bidet') || p.includes('washer') || p.includes('dryer') || p.includes('multi-product') || p.includes('rental'))
+    return { icon: 'refresh',  label: 'Coway Rental',       color: '#155E75', soft: 'rgba(21,94,117,0.1)' };
+  // Personal financing
+  if (p.includes('personal') || p.includes('asb'))
     return { icon: 'document', label: 'Personal Financing', color: '#059669', soft: 'rgba(5,150,105,0.1)' };
-  if (p.includes('asb'))
-    return { icon: 'cash',     label: 'ASB Financing',      color: '#D97706', soft: 'rgba(217,119,6,0.1)' };
+  // Auto finance
   if (p.includes('auto') || p.includes('car'))
     return { icon: 'cash',     label: 'Auto Finance',       color: '#DC2626', soft: 'rgba(220,38,38,0.1)' };
-  if (p.includes('postpaid') || p.includes('device') || p.includes('broadband') || p.includes('fibre'))
+  // Maxis plans
+  if (p.includes('maxis postpaid') || p.includes('zerolution'))
+    return { icon: 'mobile',   label: 'Maxis Postpaid',     color: '#CA8A04', soft: 'rgba(202,138,4,0.1)' };
+  // U Mobile HERO / ULTRA plans
+  if (p.includes('hero') || p.includes('ultra postpaid') || p.includes('ultra global') || p.includes('giler'))
+    return { icon: 'mobile',   label: 'U Mobile Postpaid',  color: '#7C3AED', soft: 'rgba(124,58,237,0.1)' };
+  // Generic postpaid / device / broadband
+  if (p.includes('postpaid') || p.includes('device') || p.includes('broadband') || p.includes('fibre') || p.includes('bundle'))
     return { icon: 'mobile',   label: 'Telco / Device',     color: '#7C3AED', soft: 'rgba(124,58,237,0.1)' };
-  if (p.includes('rental') || p.includes('purifier') || p.includes('mattress'))
-    return { icon: 'refresh',  label: 'Rental Product',     color: '#0891B2', soft: 'rgba(8,145,178,0.1)' };
-  if (p.includes('sme') || p.includes('business') || p.includes('term loan') || p.includes('working capital'))
+  // Business / SME
+  if (p.includes('sme') || p.includes('business') || p.includes('term loan') || p.includes('working capital') || p.includes('flexi loan'))
     return { icon: 'building', label: 'Business Loan',      color: '#B45309', soft: 'rgba(180,83,9,0.1)' };
   return   { icon: 'receipt',  label: 'Loan / Financing',   color: 'var(--muted)', soft: 'var(--surface-2)' };
 }
