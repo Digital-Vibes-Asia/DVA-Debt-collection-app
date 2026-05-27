@@ -112,10 +112,30 @@ function PlansScreen({ onOpenDebtor }) {
 }
 
 function PlanBuilder() {
-  const [n, setN] = useState(3);
+  const [n, setN]           = useState(3);
+  const [clientId, setClientId] = useState('maybank');
+  const [clientOpen, setClientOpen] = useState(false);
+  const clientRef = useRef(null);
+
+  const clients = window.CLIENT_ORGS || [
+    { id: 'maybank', code: 'MB', name: 'Maybank',  sub: 'Cards & loans · MY', bg: 'linear-gradient(135deg,#FEF3C7,#FCD34D)', fg: '#92400E' },
+  ];
+  const activeClient = clients.find(c => c.id === clientId) || clients[0];
+
   const total = 6780;
-  const ccy = 'MYR';
-  const each = Math.round(total / n);
+  const ccy   = 'MYR';
+  const each  = Math.round(total / n);
+
+  // Close client dropdown on outside click
+  useEffect(() => {
+    if (!clientOpen) return;
+    function onDoc(e) { if (clientRef.current && !clientRef.current.contains(e.target)) setClientOpen(false); }
+    document.addEventListener('mousedown', onDoc);
+    return () => document.removeEventListener('mousedown', onDoc);
+  }, [clientOpen]);
+
+  // Slider fill percentage for styling
+  const sliderPct = ((n - 1) / 11) * 100;
 
   return (
     <Card padding={0} style={{ position: 'sticky', top: 80 }}>
@@ -129,6 +149,71 @@ function PlanBuilder() {
       </div>
 
       <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+        {/* Client selector */}
+        <div ref={clientRef} style={{ position: 'relative' }}>
+          <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500, marginBottom: 6 }}>Client</div>
+          <button
+            onClick={() => setClientOpen(v => !v)}
+            style={{
+              width: '100%', padding: '8px 10px',
+              background: 'var(--surface-2)', border: '1px solid var(--line)',
+              borderRadius: 8, display: 'flex', alignItems: 'center', gap: 10,
+              cursor: 'pointer', textAlign: 'left',
+            }}
+          >
+            <div style={{
+              width: 26, height: 26, borderRadius: 6, flexShrink: 0,
+              background: activeClient.bg, color: activeClient.fg,
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 700, fontSize: 11,
+            }}>{activeClient.code}</div>
+            <div style={{ flex: 1, lineHeight: 1.2 }}>
+              <div style={{ fontSize: 13, fontWeight: 600 }}>{activeClient.name}</div>
+              <div style={{ fontSize: 10.5, color: 'var(--muted)' }}>{activeClient.sub}</div>
+            </div>
+            <Icon name="chevDown" size={13} color="var(--muted)" />
+          </button>
+          {clientOpen && (
+            <div style={{
+              position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+              background: 'var(--card)', border: '1px solid var(--line)',
+              borderRadius: 10, padding: 4, zIndex: 30,
+              boxShadow: 'var(--shadow-lg)',
+            }}>
+              {clients.map(c => {
+                const active = c.id === clientId;
+                return (
+                  <button key={c.id} onClick={() => { setClientId(c.id); setClientOpen(false); }}
+                    style={{
+                      width: '100%', padding: '7px 8px',
+                      background: active ? 'var(--surface-2)' : 'transparent',
+                      border: 'none', borderRadius: 7,
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      cursor: 'pointer', textAlign: 'left',
+                    }}
+                    onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface)'; }}
+                    onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <div style={{
+                      width: 24, height: 24, borderRadius: 5, flexShrink: 0,
+                      background: c.bg, color: c.fg,
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      fontWeight: 700, fontSize: 10,
+                    }}>{c.code}</div>
+                    <div style={{ flex: 1, lineHeight: 1.2 }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--ink)' }}>{c.name}</div>
+                      <div style={{ fontSize: 10.5, color: 'var(--muted)' }}>{c.sub}</div>
+                    </div>
+                    {active && <Icon name="check" size={12} color="var(--brand)" strokeWidth={2.5} />}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Debtor */}
         <div>
           <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500, marginBottom: 6 }}>For</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 8, background: 'var(--surface-2)', borderRadius: 8 }}>
@@ -145,46 +230,64 @@ function PlanBuilder() {
           <Field label="Total agreed" value={fmtMoney(total, ccy)} mono large />
         </div>
 
-        {/* Instalments */}
+        {/* Instalments slider */}
         <div>
-          <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500, marginBottom: 8 }}>Number of instalments</div>
-          <div style={{ display: 'flex', gap: 6 }}>
-            {[2, 3, 4, 6].map(k => (
-              <button key={k} onClick={() => setN(k)} style={{
-                flex: 1, padding: '10px 0',
-                background: n === k ? 'var(--ink)' : '#fff',
-                color: n === k ? '#fff' : 'var(--ink-2)',
-                border: '1px solid ' + (n === k ? 'var(--ink)' : 'var(--line)'),
-                borderRadius: 8,
-                fontSize: 14, fontWeight: 600,
-              }} className="tnum">{k}×</button>
-            ))}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 10 }}>
+            <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500 }}>Number of instalments</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+              <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em' }} className="tnum">{n}</span>
+              <span style={{ fontSize: 12, color: 'var(--muted)' }}>month{n !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+
+          {/* Slider */}
+          <div style={{ position: 'relative', padding: '4px 0 2px' }}>
+            <style>{`
+              .plan-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 5px; border-radius: 999px; outline: none; cursor: pointer; background: linear-gradient(to right, var(--ink) 0%, var(--ink) ${sliderPct}%, var(--line) ${sliderPct}%, var(--line) 100%); }
+              .plan-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); border: 2px solid var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.25); cursor: pointer; transition: transform 100ms ease; }
+              .plan-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+              .plan-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--ink); border: 2px solid var(--card); cursor: pointer; }
+            `}</style>
+            <input
+              type="range" min={1} max={12} value={n}
+              onChange={e => setN(Number(e.target.value))}
+              className="plan-slider"
+            />
+            {/* Min / max labels */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 5, fontSize: 10.5, color: 'var(--muted)' }}>
+              <span>1 month</span>
+              <span style={{ color: 'var(--ink-2)', fontWeight: 500 }} className="tnum">RM {each.toLocaleString()} / mo</span>
+              <span>12 months</span>
+            </div>
           </div>
         </div>
 
-        {/* Generated plan */}
+        {/* Generated schedule */}
         <Card padding={12} style={{ background: 'var(--surface-2)' }}>
           <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>
             Schedule · monthly on 26th
           </div>
-          {Array.from({ length: n }).map((_, i) => (
-            <div key={i} style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              padding: '8px 0',
-              borderBottom: i === n - 1 ? 'none' : '1px solid var(--line-2)',
-            }}>
-              <span style={{
-                width: 22, height: 22, borderRadius: 11, fontSize: 11, fontWeight: 600,
-                background: 'var(--card)', color: 'var(--ink-2)',
-                border: '1px solid var(--line)',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              }}>{i + 1}</span>
-              <span style={{ flex: 1, fontSize: 12, color: 'var(--ink-2)' }}>
-                {new Date(2026, 4 + i, 26).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-              </span>
-              <span style={{ fontSize: 13, fontWeight: 600 }} className="tnum">RM {each.toLocaleString()}</span>
-            </div>
-          ))}
+          <div style={{ maxHeight: 180, overflowY: n > 4 ? 'auto' : 'visible' }} className="thin-scroll">
+            {Array.from({ length: n }).map((_, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '7px 0',
+                borderBottom: i === n - 1 ? 'none' : '1px solid var(--line-2)',
+              }}>
+                <span style={{
+                  width: 20, height: 20, borderRadius: 10, fontSize: 10, fontWeight: 600,
+                  background: 'var(--card)', color: 'var(--ink-2)',
+                  border: '1px solid var(--line)',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>{i + 1}</span>
+                <span style={{ flex: 1, fontSize: 12, color: 'var(--ink-2)' }}>
+                  {new Date(2026, 4 + i, 26).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                </span>
+                <span style={{ fontSize: 13, fontWeight: 600 }} className="tnum">RM {each.toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
           <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--line)', display: 'flex' }}>
             <span style={{ flex: 1, fontSize: 12, fontWeight: 500 }}>Total</span>
             <span style={{ fontSize: 13.5, fontWeight: 600 }} className="tnum">RM {total.toLocaleString()}</span>
@@ -197,7 +300,7 @@ function PlanBuilder() {
           border: '1px solid rgba(0,184,217,0.25)', borderRadius: 8,
           fontSize: 11.5, color: 'var(--vox-deep)', lineHeight: 1.4,
         }}>
-          <b>Vox suggests 3×.</b> Customer's payment-history shows reliable monthly bursts. 26th aligns with salary day.
+          <b>Vox suggests {n <= 3 ? '3×' : n <= 6 ? '6×' : '12×'}.</b> Customer's payment-history shows reliable monthly bursts. 26th aligns with salary day.
         </div>
 
         <div style={{ display: 'flex', gap: 6 }}>
