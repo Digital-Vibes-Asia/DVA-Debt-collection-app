@@ -311,7 +311,7 @@ function HeadOfSalesPreview() {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, flex: 1, minHeight: 0, color: '#FBFAF7' }}>
+    <div style={{ display: 'grid', gridTemplateRows: 'auto auto 1fr', gap: 14, flex: 1, minHeight: 0, color: '#FBFAF7', overflow: 'hidden' }}>
       <div>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#00B8D9', fontSize: 11.5, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
           <StatDot color="#00B8D9" pulse /> All dashboards · live
@@ -341,7 +341,7 @@ function HeadOfSalesPreview() {
       </div>
 
       {/* Senior managers + their teams */}
-      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }} className="thin-scroll">
+      <div style={{ minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }} className="thin-scroll">
         {seniorManagers.map((sm, si) => (
           <div key={si} style={{
             background: 'rgba(255,255,255,0.04)',
