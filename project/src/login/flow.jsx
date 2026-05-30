@@ -157,12 +157,20 @@ function SalesManagerPreview() {
 }
 
 function SeniorManagerPreview() {
+  const CLIENT_CHIPS = {
+    'MB': { label: 'Maybank',  bg: '#FEF3C7', fg: '#92400E' },
+    'CI': { label: 'CIMB',     bg: '#FFE4E6', fg: '#9F1239' },
+    'RH': { label: 'RHB',      bg: '#EDE9FE', fg: '#5B21B6' },
+    'CW': { label: 'Coway',    bg: '#CFFAFE', fg: '#155E75' },
+    'MX': { label: 'Maxis',    bg: '#FEF9C3', fg: '#713F12' },
+    'UM': { label: 'U Mobile', bg: '#F3E8FF', fg: '#6B21A8' },
+  };
   const pods = [
-    { name: 'Farah Aziz',         region: 'KL Central',    agents: 6, book: '1.24', util: 0.78, color: '#E11D48' },
-    { name: 'Noraini binti Said', region: 'Johor Bahru',   agents: 7, book: '1.45', util: 0.81, color: '#15803D' },
-    { name: 'Rajendran Pillai',   region: 'Penang',        agents: 4, book: '2.18', util: 0.72, color: '#006C82' },
-    { name: 'Lim Cheng Wei',      region: 'Seremban',      agents: 5, book: '0.92', util: 0.64, color: '#B45309' },
-    { name: 'Salmah binti Yusof', region: 'Sabah/Sarawak', agents: 4, book: '0.68', util: 0.55, color: '#9F1239' },
+    { name: 'Farah Aziz',         region: 'KL Central',    agents: 6, book: '1.24', util: 0.78, color: '#E11D48', clients: ['MB','CI','CW'] },
+    { name: 'Noraini binti Said', region: 'Johor Bahru',   agents: 7, book: '1.45', util: 0.81, color: '#15803D', clients: ['MB','RH','MX'] },
+    { name: 'Rajendran Pillai',   region: 'Penang',        agents: 4, book: '2.18', util: 0.72, color: '#006C82', clients: ['CI','RH'] },
+    { name: 'Lim Cheng Wei',      region: 'Seremban',      agents: 5, book: '0.92', util: 0.64, color: '#B45309', clients: ['MB','CW','UM'] },
+    { name: 'Salmah binti Yusof', region: 'Sabah/Sarawak', agents: 4, book: '0.68', util: 0.55, color: '#9F1239', clients: ['RH','MX','UM'] },
   ];
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14, height: '100%' }}>
@@ -199,49 +207,46 @@ function SeniorManagerPreview() {
           <div style={{ fontSize: 12, fontWeight: 600 }}>Sales managers under you</div>
           <div style={{ fontSize: 11, color: '#A1A1AA' }} className="mono">sort: utilisation ↓</div>
         </div>
-        {/* Column headers */}
         <div style={{
-          display: 'grid', gridTemplateColumns: '32px 1fr 80px 80px 1fr 50px',
-          alignItems: 'center', gap: 12,
+          display: 'grid', gridTemplateColumns: '32px 1fr 60px 70px 90px 1fr 44px',
+          alignItems: 'center', gap: 10,
           padding: '6px 14px', borderBottom: '1px solid #F5F4EE',
           background: '#FAFAF9',
         }}>
-          {['', 'Manager / Region', 'Agents', 'Book', 'Utilisation', 'Status'].map((h, i) => (
-            <div key={i} style={{
-              fontSize: 10, fontWeight: 600, color: '#A1A1AA',
-              letterSpacing: '0.07em', textTransform: 'uppercase',
-              textAlign: i >= 2 && i <= 3 ? 'left' : i === 5 ? 'right' : 'left',
-            }}>{h}</div>
+          {['', 'Manager / Region', 'Agents', 'Book', 'Clients', 'Utilisation', 'Status'].map((h, i) => (
+            <div key={i} style={{ fontSize: 10, fontWeight: 600, color: '#A1A1AA', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{h}</div>
           ))}
         </div>
         {pods.map((p, i) => (
           <div key={i} style={{
-            display: 'grid', gridTemplateColumns: '32px 1fr 80px 80px 1fr 50px',
-            alignItems: 'center', gap: 12,
-            padding: '10px 14px',
+            display: 'grid', gridTemplateColumns: '32px 1fr 60px 70px 90px 1fr 44px',
+            alignItems: 'center', gap: 10,
+            padding: '9px 14px',
             borderTop: i ? '1px solid #F5F4EE' : 'none',
           }}>
             <div style={{
-              width: 30, height: 30, borderRadius: 8,
+              width: 28, height: 28, borderRadius: 7,
               background: p.color + '15', color: p.color,
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 700, fontSize: 11,
+              fontWeight: 700, fontSize: 10,
               border: '1px solid ' + p.color + '33',
             }}>{p.name.split(' ').map(n => n[0]).join('').slice(0, 2)}</div>
             <div>
-              <div style={{ fontSize: 12.5, fontWeight: 600 }}>{p.name}</div>
-              <div style={{ fontSize: 10.5, color: '#A1A1AA' }}>{p.region}</div>
+              <div style={{ fontSize: 12, fontWeight: 600 }}>{p.name}</div>
+              <div style={{ fontSize: 10, color: '#A1A1AA' }}>{p.region}</div>
+            </div>
+            <div style={{ fontSize: 12, fontWeight: 600 }} className="tnum">{p.agents}</div>
+            <div style={{ fontSize: 12, fontWeight: 600 }} className="tnum">RM {p.book}M</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+              {p.clients.map(code => {
+                const c = CLIENT_CHIPS[code];
+                return (
+                  <span key={code} style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 4, background: c.bg, color: c.fg }}>{code}</span>
+                );
+              })}
             </div>
             <div>
-              <div style={{ fontSize: 10, color: '#A1A1AA' }}>Agents</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600 }} className="tnum">{p.agents}</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 10, color: '#A1A1AA' }}>Book</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600 }} className="tnum">RM {p.book}M</div>
-            </div>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#A1A1AA', marginBottom: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#A1A1AA', marginBottom: 3 }}>
                 <span>Util</span>
                 <span style={{ color: '#0B0B0F', fontWeight: 600 }} className="tnum">{Math.round(p.util * 100)}%</span>
               </div>
@@ -249,7 +254,7 @@ function SeniorManagerPreview() {
                 <div style={{ height: '100%', width: (p.util * 100) + '%', background: p.color }} />
               </div>
             </div>
-            <div style={{ textAlign: 'right' }}>
+            <div>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, padding: '2px 6px', borderRadius: 999, background: '#ECFDF3', color: '#15803D', fontWeight: 600 }}>
                 <StatDot color="#15803D" /> on
               </span>
@@ -262,118 +267,162 @@ function SeniorManagerPreview() {
 }
 
 function HeadOfSalesPreview() {
+  const CLIENT_CHIPS = {
+    'MB': { label: 'Maybank',  bg: '#FEF3C7', fg: '#92400E' },
+    'CI': { label: 'CIMB',     bg: '#FFE4E6', fg: '#9F1239' },
+    'RH': { label: 'RHB',      bg: '#EDE9FE', fg: '#5B21B6' },
+    'CW': { label: 'Coway',    bg: '#CFFAFE', fg: '#155E75' },
+    'MX': { label: 'Maxis',    bg: '#FEF9C3', fg: '#713F12' },
+    'UM': { label: 'U Mobile', bg: '#F3E8FF', fg: '#6B21A8' },
+  };
+
+  const seniorManagers = [
+    {
+      name: 'Daniel Ong', region: 'West Malaysia', color: '#B45309',
+      managers: 5, agents: 26, book: '6.47', util: 0.74,
+      clients: ['MB','CI','RH','CW'],
+      team: [
+        { name: 'Farah Aziz',         region: 'KL Central',    book: '1.24', clients: ['MB','CI','CW'] },
+        { name: 'Noraini binti Said', region: 'Johor Bahru',   book: '1.45', clients: ['MB','RH','MX'] },
+        { name: 'Rajendran Pillai',   region: 'Penang',        book: '2.18', clients: ['CI','RH'] },
+        { name: 'Lim Cheng Wei',      region: 'Seremban',      book: '0.92', clients: ['MB','CW','UM'] },
+        { name: 'Salmah binti Yusof', region: 'Sabah/Sarawak', book: '0.68', clients: ['RH','MX','UM'] },
+      ],
+    },
+    {
+      name: 'Priya Nair', region: 'Singapore · Indonesia', color: '#0891B2',
+      managers: 3, agents: 14, book: '4.20', util: 0.68,
+      clients: ['CI','MX','UM'],
+      team: [
+        { name: 'Kevin Tan',     region: 'Singapore',  book: '1.82', clients: ['CI','MX'] },
+        { name: 'Rina Susanto',  region: 'Jakarta',    book: '1.44', clients: ['UM','CI'] },
+        { name: 'Wei Jie Loh',   region: 'Penang/SG',  book: '0.94', clients: ['MX','UM'] },
+      ],
+    },
+    {
+      name: 'Azhari Hamid', region: 'East Malaysia · Brunei', color: '#7C3AED',
+      managers: 2, agents: 9, book: '2.18', util: 0.61,
+      clients: ['MB','RH','CW'],
+      team: [
+        { name: 'Sylvester Giun', region: 'Sarawak',   book: '1.30', clients: ['MB','RH'] },
+        { name: 'Dayang Nuraini', region: 'Sabah/Labuan', book: '0.88', clients: ['CW','MB'] },
+      ],
+    },
+  ];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14, height: '100%', color: '#FBFAF7' }}>
       <div>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#00B8D9', fontSize: 11.5, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
           <StatDot color="#00B8D9" pulse /> All dashboards · live
         </div>
-        <h2 style={{ margin: 0, fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em', maxWidth: 460, lineHeight: 1.15, fontFamily: 'var(--font-serif)' }}>
-          6 client orgs · Malaysia · <em style={{
+        <h2 style={{ margin: 0, fontSize: 26, fontWeight: 500, letterSpacing: '-0.02em', maxWidth: 480, lineHeight: 1.15, fontFamily: 'var(--font-serif)' }}>
+          3 senior managers · 10 sales teams · <em style={{
             background: 'linear-gradient(120deg, #00B8D9, #FBFAF7, #E11D48)',
             WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', fontStyle: 'italic',
-          }}>RM 184.6M</em> under your watch.
+          }}>RM 12.85M</em> under your watch.
         </h2>
       </div>
 
-      <div style={{
-        background: 'linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 14,
-        padding: '18px 18px',
-        backdropFilter: 'blur(10px)',
-        display: 'flex', flexDirection: 'column', gap: 14,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>Network book</div>
-            <div style={{ fontSize: 30, fontWeight: 500, letterSpacing: '-0.025em', marginTop: 4 }} className="tnum">
-              RM <span style={{ color: '#00B8D9' }}>184.6M</span>
-            </div>
+      {/* KPI row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+        {[
+          { label: 'Network book', value: 'RM 12.85M', sub: '↑ 12.4% YTD' },
+          { label: 'Sr. Managers', value: '3',         sub: 'all online'   },
+          { label: 'Total agents', value: '49',        sub: '45 active'    },
+          { label: 'Client orgs',  value: '6',         sub: 'MY · SG · ID' },
+        ].map((k, i) => (
+          <div key={i} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '10px 12px' }}>
+            <div style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 4 }}>{k.label}</div>
+            <div style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.02em' }} className="tnum">{k.value}</div>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{k.sub}</div>
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)' }}>Recovery YTD</div>
-            <div style={{ fontSize: 18, fontWeight: 600, color: '#86EFAC' }} className="tnum">+ 12.4%</div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {[
-            { name: 'Maybank',   val: 52.1, pct: 0.35, color: '#FCD34D' },
-            { name: 'CIMB',      val: 44.8, pct: 0.30, color: '#E11D48' },
-            { name: 'RHB',       val: 38.2, pct: 0.26, color: '#A78BFA' },
-            { name: 'Coway',     val: 24.6, pct: 0.17, color: '#00B8D9' },
-            { name: 'Maxis',     val: 15.4, pct: 0.10, color: '#F59E0B' },
-            { name: 'U Mobile',  val:  9.5, pct: 0.06, color: '#C084FC' },
-          ].map((r, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '90px 1fr 84px', alignItems: 'center', gap: 14 }}>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>{r.name}</div>
-              <div style={{ height: 7, borderRadius: 999, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: (r.pct * 100 / 0.35) + '%', background: r.color, borderRadius: 999 }} />
-              </div>
-              <div style={{ fontSize: 12, fontWeight: 600, textAlign: 'right' }} className="tnum">RM {r.val.toFixed(1)}M</div>
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
 
-      <div style={{
-        flex: 1,
-        background: 'linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 14,
-        padding: '14px 16px',
-        display: 'flex', flexDirection: 'column', gap: 12,
-      }}>
-        <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>Client portfolios</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-          {[
-            { code: 'MB', name: 'Maybank',  book: '52.1', bg: 'linear-gradient(135deg, #FEF3C7, #FCD34D)', fg: '#92400E' },
-            { code: 'CI', name: 'CIMB',     book: '44.8', bg: 'linear-gradient(135deg, #FFE4E6, #FECDD3)', fg: '#9F1239' },
-            { code: 'RH', name: 'RHB',      book: '38.2', bg: 'linear-gradient(135deg, #EDE9FE, #C4B5FD)', fg: '#5B21B6' },
-            { code: 'CW', name: 'Coway',    book: '24.6', bg: 'linear-gradient(135deg, #CFFAFE, #67E8F9)', fg: '#155E75' },
-            { code: 'MX', name: 'Maxis',    book: '15.4', bg: 'linear-gradient(135deg, #FEF9C3, #FDE68A)', fg: '#713F12' },
-            { code: 'UM', name: 'U Mobile', book:  '9.5', bg: 'linear-gradient(135deg, #F3E8FF, #D8B4FE)', fg: '#6B21A8' },
-          ].map((c, i) => (
-            <div key={i} style={{
-              padding: '12px 10px',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: 10,
-              display: 'flex', alignItems: 'center', gap: 10,
+      {/* Senior managers + their teams */}
+      <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }} className="thin-scroll">
+        {seniorManagers.map((sm, si) => (
+          <div key={si} style={{
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 12,
+            overflow: 'hidden',
+          }}>
+            {/* Senior Manager header row */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: '28px 1fr auto auto',
+              alignItems: 'center', gap: 12,
+              padding: '10px 14px',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              background: 'rgba(255,255,255,0.04)',
             }}>
               <div style={{
-                width: 30, height: 30, borderRadius: 8,
-                background: c.bg, color: c.fg,
+                width: 26, height: 26, borderRadius: 6, flexShrink: 0,
+                background: sm.color + '30', color: sm.color,
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 700, fontSize: 11, flexShrink: 0,
-              }}>{c.code}</div>
-              <div style={{ lineHeight: 1.2, minWidth: 0 }}>
-                <div style={{ fontSize: 11.5, fontWeight: 600 }}>{c.name}</div>
-                <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)' }} className="tnum">RM {c.book}M</div>
+                fontWeight: 700, fontSize: 10, border: '1px solid ' + sm.color + '55',
+              }}>{sm.name.split(' ').map(n => n[0]).join('').slice(0,2)}</div>
+              <div>
+                <div style={{ fontSize: 12.5, fontWeight: 700 }}>{sm.name}</div>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)' }}>{sm.region} · {sm.managers} sales managers · {sm.agents} agents</div>
+              </div>
+              <div style={{ display: 'flex', gap: 3 }}>
+                {sm.clients.map(code => {
+                  const c = CLIENT_CHIPS[code];
+                  return <span key={code} style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 4, background: c.bg, color: c.fg }}>{code}</span>;
+                })}
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: 13, fontWeight: 700 }} className="tnum">RM {sm.book}M</div>
+                <div style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.4)' }}>Util {Math.round(sm.util*100)}%</div>
               </div>
             </div>
-          ))}
-        </div>
 
+            {/* Sales manager team rows */}
+            {sm.team.map((p, pi) => (
+              <div key={pi} style={{
+                display: 'grid', gridTemplateColumns: '20px 1fr auto auto',
+                alignItems: 'center', gap: 10,
+                padding: '7px 14px 7px 30px',
+                borderTop: pi ? '1px solid rgba(255,255,255,0.04)' : 'none',
+              }}>
+                <div style={{
+                  width: 18, height: 18, borderRadius: 4,
+                  background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 700, fontSize: 8,
+                }}>{p.name.split(' ').map(n => n[0]).join('').slice(0,2)}</div>
+                <div>
+                  <div style={{ fontSize: 11.5, fontWeight: 500 }}>{p.name}</div>
+                  <div style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.35)' }}>{p.region}</div>
+                </div>
+                <div style={{ display: 'flex', gap: 3 }}>
+                  {p.clients.map(code => {
+                    const c = CLIENT_CHIPS[code];
+                    return <span key={code} style={{ fontSize: 8.5, fontWeight: 700, padding: '1px 4px', borderRadius: 3, background: c.bg + 'CC', color: c.fg }}>{code}</span>;
+                  })}
+                </div>
+                <div style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.7)' }} className="tnum">RM {p.book}M</div>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        {/* Vox briefing */}
         <div style={{
-          marginTop: 'auto',
           padding: '10px 12px',
           borderRadius: 10,
           background: 'linear-gradient(135deg, rgba(11,11,15,0.6), rgba(0,108,130,0.18))',
           border: '1px solid rgba(0,184,217,0.20)',
-          display: 'flex', alignItems: 'center', gap: 10,
+          display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0,
         }}>
           <div style={{
-            width: 30, height: 30, borderRadius: 999,
-            background: 'linear-gradient(135deg, #0B0B0F, #006C82)',
-            color: '#00B8D9',
+            width: 28, height: 28, borderRadius: 999,
+            background: 'linear-gradient(135deg, #0B0B0F, #006C82)', color: '#00B8D9',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: 'inset 0 0 0 1px rgba(0,184,217,0.4)',
-            flexShrink: 0,
-          }}>
-            <Icon name="bot" size={16} />
-          </div>
+            boxShadow: 'inset 0 0 0 1px rgba(0,184,217,0.4)', flexShrink: 0,
+          }}><Icon name="bot" size={15} /></div>
           <div style={{ flex: 1, lineHeight: 1.3 }}>
             <div style={{ fontSize: 11.5, fontWeight: 600 }}>Vox has your morning briefing</div>
             <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.55)' }}>3 escalations · 1 hardship review pending</div>
