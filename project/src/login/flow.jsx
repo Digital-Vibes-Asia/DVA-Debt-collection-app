@@ -341,7 +341,7 @@ function HeadOfSalesPreview() {
       </div>
 
       {/* Senior managers + their teams */}
-      <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }} className="thin-scroll">
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }} className="thin-scroll">
         {seniorManagers.map((sm, si) => (
           <div key={si} style={{
             background: 'rgba(255,255,255,0.04)',
