@@ -713,11 +713,13 @@ function LoginFlow() {
         {/* Form panel — always light */}
         <div style={{
           padding: '36px 44px',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 18,
+          display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 18,
           background: dark ? 'rgba(11,11,15,0.55)' : 'transparent',
           backdropFilter: dark ? 'blur(14px)' : undefined,
           borderRight: dark ? '1px solid rgba(255,255,255,0.05)' : 'none',
+          overflowY: 'auto',
         }}>
+          <div style={{ flex: '0 0 auto', display: 'flex', flexDirection: 'column', gap: 18, margin: 'auto 0' }}>
           <div>
             <div style={{
               fontSize: 11.5, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
@@ -814,6 +816,7 @@ function LoginFlow() {
             <Icon name="lock" size={12} />
             {r.scopeLine}
           </div>
+          </div>{/* end inner auto-margin wrapper */}
         </div>
 
         {/* Right preview pane — morphs on role change */}
