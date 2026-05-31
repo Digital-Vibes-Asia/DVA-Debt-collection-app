@@ -311,7 +311,7 @@ function HeadOfSalesPreview() {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, flex: 1, minHeight: 0, color: '#FBFAF7' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, height: '100%', color: '#FBFAF7' }}>
       <div>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#00B8D9', fontSize: 11.5, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
           <StatDot color="#00B8D9" pulse /> All dashboards · live
