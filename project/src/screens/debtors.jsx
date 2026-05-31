@@ -991,6 +991,7 @@ function DebtorsScreen({ onOpenDebtor }) {
   const [clients, setClients]   = useState([]); // multi-select
   const [product, setProduct]   = useState('all');
   const [channel, setChannel]   = useState('all');
+  const [status, setStatus]     = useState('all');
   const [sort, setSort]         = useState('days-desc');
   const [activeClientId, setActiveClientId] = useState(window.ACTIVE_CLIENT_ID || 'maybank');
 
@@ -1059,6 +1060,16 @@ function DebtorsScreen({ onOpenDebtor }) {
     { value: 'email',    label: 'Email' },
   ];
 
+  const statusOptions = [
+    { value: 'all',         label: 'All statuses' },
+    { value: 'ptp',         label: 'PTP',         dot: '#16A34A' },
+    { value: 'no-contact',  label: 'No-contact',  dot: '#DC2626' },
+    { value: 'cooperative', label: 'Cooperative',  dot: '#0891B2' },
+    { value: 'neutral',     label: 'Neutral',      dot: '#6B7280' },
+    { value: 'avoidant',    label: 'Avoidant',     dot: '#D97706' },
+    { value: 'distressed',  label: 'Distressed',   dot: '#9F1239' },
+  ];
+
   const sortOptions = [
     { value: 'days-desc',   label: 'Days overdue · most first' },
     { value: 'days-asc',    label: 'Days overdue · least first' },
@@ -1079,6 +1090,14 @@ function DebtorsScreen({ onOpenDebtor }) {
       if (clients.length > 0 && !clients.includes(d.clientId)) return false;
       if (product !== 'all'  && d.product !== product) return false;
       if (channel !== 'all'  && d.lastChannel !== channel) return false;
+      if (status !== 'all') {
+        if (status === 'ptp'        && !d.promiseToPay) return false;
+        if (status === 'no-contact' && d.sentiment !== 'avoidant') return false;
+        if (status === 'cooperative'&& d.sentiment !== 'cooperative') return false;
+        if (status === 'neutral'    && d.sentiment !== 'neutral') return false;
+        if (status === 'avoidant'   && d.sentiment !== 'avoidant') return false;
+        if (status === 'distressed' && d.sentiment !== 'distressed') return false;
+      }
       if (query) {
         const q = query.toLowerCase();
         if (
@@ -1116,7 +1135,7 @@ function DebtorsScreen({ onOpenDebtor }) {
       }
     }
     return out;
-  }, [allDebtors, bucket, assigned, clients, product, channel, query, sort]);
+  }, [allDebtors, bucket, assigned, clients, product, channel, status, query, sort]);
 
   // SGD-equivalent total of filtered balances (for header)
   const filteredTotalSGD = useMemo(() => {
@@ -1129,12 +1148,13 @@ function DebtorsScreen({ onOpenDebtor }) {
     clients.length > 0,
     product !== 'all',
     channel !== 'all',
+    status !== 'all',
     !!query,
   ].filter(Boolean).length;
 
   function clearAll() {
     setBucket('all'); setAssigned('all'); setClients([]);
-    setProduct('all'); setChannel('all'); setQuery('');
+    setProduct('all'); setChannel('all'); setStatus('all'); setQuery('');
   }
 
   function toggleSelect(id) {
@@ -1176,6 +1196,7 @@ function DebtorsScreen({ onOpenDebtor }) {
         <MultiFilterDropdown icon="building" label="Client" values={clients} options={clientOptions} onChange={setClients} />
         <FilterDropdown icon="tag"      label="Product"  value={product}  options={productOptions}  onChange={setProduct} />
         <FilterDropdown icon="bot"      label="Channel"  value={channel}  options={channelOptions}  onChange={setChannel} />
+        <FilterDropdown icon="check"    label="Status"   value={status}   options={statusOptions}   onChange={setStatus} />
         {activeFilterCount > 0 && (
           <button onClick={clearAll} style={{
             height: 30, padding: '0 10px',
