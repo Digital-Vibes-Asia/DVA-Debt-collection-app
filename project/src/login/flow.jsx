@@ -341,7 +341,7 @@ function HeadOfSalesPreview() {
       </div>
 
       {/* Senior managers + their teams */}
-      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', maxHeight: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', gap: 8 }} className="thin-scroll">
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }} className="thin-scroll">
         {seniorManagers.map((sm, si) => (
           <div key={si} style={{
             background: 'rgba(255,255,255,0.04)',
@@ -872,13 +872,13 @@ function LoginFlow() {
         <div style={{
           padding: '36px 44px 36px 24px',
           position: 'relative',
-          display: 'flex', flexDirection: 'column',
-          minHeight: 0, overflow: 'hidden',
+          overflow: 'hidden',
         }}>
           <div
             key={role}
             style={{
-              flex: 1, minHeight: 0,
+              position: 'absolute',
+              top: 36, bottom: 36, left: 24, right: 44,
               display: 'flex', flexDirection: 'column',
               animation: 'previewIn 460ms cubic-bezier(.2,.8,.2,1)',
             }}
